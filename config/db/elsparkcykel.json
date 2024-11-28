@@ -1,0 +1,7 @@
+{
+    "host": ".local",
+    "user": "dbadm",
+    "password": "P@ssw0rd",
+    "database": "elsparkcykel",
+    "multipleStatements": true
+}
