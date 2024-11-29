@@ -1,6 +1,7 @@
 "use strict";
 const express = require("express");
 const app = express();
+require('dotenv').config(); // Load variables from .env file
 const morgan = require("morgan"); // Middleware for logging HTTP requests
 const rateLimit = require("express-rate-limit"); // Middleware to limit repeated requests
 const citiesRoutes = require("./routes/cities.js"); // Cities routes file
@@ -58,8 +59,10 @@ app.use((req, res, next) => {
         apiKey = req.body['api_key'];
     }
 
+
     // Validate the API key
     if (!apiKey || apiKey !== process.env.API_KEY) {
+        console.log("test",process.env.API_KEY); // Log failure
         return res.status(403).json({ error: "Forbidden: Invalid API key" }); // Return an error if invalid
     }
 
