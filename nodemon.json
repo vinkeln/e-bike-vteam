@@ -1,6 +1,0 @@
-{
-    "env": {
-        "API_KEY": "key123",
-        "JWT_KEY":"secret"
-    }
-}
