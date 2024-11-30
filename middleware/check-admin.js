@@ -8,10 +8,10 @@ module.exports = async (req, res, next) => {
 
         const user = await userModules.getUserid(req.userData.userId); 
 
-        if (!user || !user[0].type === "admin") {
-            res.status(403).json({
+        if (!user || user[0].role !== "admin") {
+            return res.status(403).json({
                 message: "Access denied! User is not an admin.",
-                user: user[0].role
+                user: user[0]?.role
             });
         }
 
