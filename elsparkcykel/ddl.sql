@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS scooter;
 DROP TABLE IF EXISTS ride;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS city;
 
 -- Tabell: user
 CREATE TABLE `user` (
@@ -97,3 +98,19 @@ CREATE TABLE `ride` (
   KEY `start_location_id` (`start_location_id`),
   KEY `end_location_id` (`end_location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Tabell: city
+CREATE TABLE `city` (
+  `city_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL,
+  `country` VARCHAR(100) NOT NULL
+);
+
+-- Uppdatera location tabell
+ALTER TABLE `location` ADD COLUMN `city_id` INT;
+
+-- Lägg till en foreign key från location till city
+ALTER TABLE `location`
+ADD CONSTRAINT `fk_location_city`
+FOREIGN KEY (`city_id`) REFERENCES `city`(`city_id`)
+ON DELETE SET NULL;
