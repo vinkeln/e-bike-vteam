@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit"); // Middleware to limit repeated
 const citiesRoutes = require("./routes/cities.js"); // Cities routes file
 const parkingsRoutes = require("./routes/parkings.js"); // Parkings routes file
 const userRoutes = require("./routes/user.js"); // User routes file
+const chargingStationsRoutes = require("./routes/chargingstations.js"); // chargingstations routes file
 const travelsRoutes = require("./routes/travels.js"); // Travels routes file
 const port = process.env.PORT || 3000; // Default port or one specified in the environment
 
@@ -72,6 +73,7 @@ app.use("/v1/cities", citiesRoutes); // All city-related routes start with /v1/c
 app.use("/v1/parking", parkingsRoutes); // All parking-related routes start with /v1/parking
 app.use("/v1/user", userRoutes); // All user-related routes start with /v1/user
 app.use("/v1/travels", travelsRoutes); // All travels-related routes start with /v1/travels
+app.use("/v1/chargingstations", chargingStationsRoutes); // All travels-related routes start with /v1/travels
 
 // Middleware to handle routes that are not defined (404 errors)
 app.use((req, res, next) => {

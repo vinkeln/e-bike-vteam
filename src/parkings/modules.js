@@ -17,7 +17,8 @@ async function getParkings() {
                 p.capacity,
                 l.latitude,
                 l.longitude,
-                l.type
+                l.type,
+                l.city_id
             FROM 
                 parkingzone p
             INNER JOIN 
@@ -42,7 +43,7 @@ async function getParkings() {
 }
 
 // Funktion för att lägga till en ny parkeringszon.
-async function addPark(latitude,longitude,maxSpeed,capacity) {
+async function addPark(latitude,longitude,cityId,maxSpeed,capacity) {
     let db = await mysql.createConnection(config);
 
     try {
@@ -51,8 +52,8 @@ async function addPark(latitude,longitude,maxSpeed,capacity) {
 
         // Infoga platsen och hämta `insertId` direkt
         const [locationResult] = await db.query(
-            "INSERT INTO location (latitude, longitude, type) VALUES (?, ?, 'parkeringszon')",
-            [latitude, longitude]
+            "INSERT INTO location (latitude, longitude, type , city_id) VALUES (?, ?, 'parkeringszon', ?)",
+            [latitude, longitude, cityId]
         );
         const locationId = locationResult.insertId; // Hämtar ID för den nyligen tillagda platsen.
 
@@ -205,11 +206,56 @@ async function updatePark(locationId,latitude, longitude, capacity,maxSpeed) {
 }
 
 
+// Funktion för att hämta alla parkeringszoner.
+async function getParkBycity(cityId) {
+
+    // Skapa en anslutning till databasen.
+    let db = await mysql.createConnection(config);
+
+    try {
+         // SQL-fråga för att hämta data från parkingzone och location med en JOIN.
+            let sql= `
+            SELECT 
+                p.zone_id,
+                p.location_id,
+                p.max_speed,
+                p.capacity,
+                l.latitude,
+                l.longitude,
+                l.type,
+                l.city_id
+            FROM 
+                parkingzone p
+            INNER JOIN 
+                location l 
+            ON 
+                p.location_id = l.location_id
+            WHERE
+            l.city_id = ?    
+                ;`;
+
+        // Kör frågan och hämta resultatet.
+        let [result] = await db.query(sql,cityId);
+
+        return result; // Returnerar listan med parkeringszoner.
+    }  catch (error) {
+
+        console.error("Error in getParkings:", error.message);
+        throw error;
+
+    } finally {
+
+        if (db) await db.end(); // Stäng anslutningen
+    }
+   
+}
+
 module.exports = {
     getParkings,
     addPark,
     getParkingLocation,
     deletePark,
     checkParkings,
-    updatePark
+    updatePark,
+    getParkBycity
 };
