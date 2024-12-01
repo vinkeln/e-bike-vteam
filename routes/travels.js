@@ -6,19 +6,36 @@ const mysql = require("mysql2/promise");
 const config = require("../config/db/elsparkcykel.json");
 
 // Get a list over all the travels in the system.
-router.get("/", checkAuth, async (req, res) => { // Requires authentication = checkAuth
+router.get("/", async (req, res) => { // Requires authentication = checkAuth
     try { // Get all travels data.
         let db = await mysql.createConnection(config);
+
         const [travels] = await db.query("SELECT * FROM ride");
-        await db.end();
-        res.status(200).json(travels);
-    } catch (error) { // When a error, get details about the error.
-        res.status(500).json({ error: "Server Error", details: error.message });
+        await db.end(); // Quit the connection
+
+        // Check if fata exist and return it.
+        if (travels.length > 0) {
+            res.status(200).json({
+                message: "Data retrieved successfully.",
+                data: travels
+            });
+        } else { 
+            res.status(200).json({ // If no data is found, return a message.
+                message: "No travel data found.",
+                data: []
+            });
+        }
+    } catch (error) {
+        // When an error occurs, return a 500 status code and an error message.
+        res.status(500).json({
+            error: "Server Error",
+            details: error.message
+        });
     }
 });
 
 // Create a new trip when a customer hires a bike.
-router.post("/", checkAuth, async (req, res) => {
+router.post("/", async (req, res) => {
     // Accepts user_id, scooter_id, start_location_id, start_time as body parameters.
     let  { user_id, scooter_id, start_location_id, start_time } = req.body;
 
@@ -41,7 +58,7 @@ router.post("/", checkAuth, async (req, res) => {
 });
 
 // Update a specific travel.
-router.put("/:rideId", checkAuth, async (req, res) => {
+router.put("/:rideId", async (req, res) => {
     let { rideId } = req.params;
     let { end_location_id, end_time, cost} = req.body;
 
@@ -68,7 +85,7 @@ router.put("/:rideId", checkAuth, async (req, res) => {
 });
 
 // Get details about a specific travel.
-router.get("/:rideId", checkAuth, async (req, res) => {
+router.get("/:rideId", async (req, res) => {
     let { rideId } = req.params;
 
     // Validate that the rideId is a number.
