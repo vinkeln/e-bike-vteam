@@ -8,6 +8,7 @@ const citiesRoutes = require("./routes/cities.js"); // Cities routes file
 const parkingsRoutes = require("./routes/parkings.js"); // Parkings routes file
 const userRoutes = require("./routes/user.js"); // User routes file
 const travelsRoutes = require("./routes/travels.js"); // Travels routes file
+const scooterRoutes = require("./routes/scooter.js"); // Scooter routes file
 const port = process.env.PORT || 3000; // Default port or one specified in the environment
 
 // Use Morgan middleware to log incoming HTTP requests
@@ -74,6 +75,8 @@ app.use("/v1/cities", citiesRoutes); // All city-related routes start with /v1/c
 app.use("/v1/parking", parkingsRoutes); // All parking-related routes start with /v1/parking
 app.use("/v1/user", userRoutes); // All user-related routes start with /v1/user
 app.use("/v1/travels", travelsRoutes); // All travels-related routes start with /v1/travels
+app.use("/v1/scooter", scooterRoutes); // All scooter-related routes start with /v1/scooter
+
 
 // Middleware to handle routes that are not defined (404 errors)
 app.use((req, res, next) => {
