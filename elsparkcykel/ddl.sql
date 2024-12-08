@@ -10,8 +10,8 @@ DROP TABLE IF EXISTS scooter;
 DROP TABLE IF EXISTS ride;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS warnings;
+DROP TABLE IF EXISTS city;
 
 -- Tabell: user
 CREATE TABLE `user` (
@@ -104,11 +104,14 @@ CREATE TABLE `ride` (
 CREATE TABLE `warnings` (
   `warning_id` INT AUTO_INCREMENT PRIMARY KEY,
   `scooter_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
   `message` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `resolved` BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`),
+  FOREIGN KEY (`scooter_id`) REFERENCES `scooter`(`scooter_id`)
 );
+
 
 -- Tabell: city
 CREATE TABLE `city` (
