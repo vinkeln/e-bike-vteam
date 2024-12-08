@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS ride;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS warnings;
 
 -- Tabell: user
 CREATE TABLE `user` (
@@ -98,6 +99,16 @@ CREATE TABLE `ride` (
   KEY `start_location_id` (`start_location_id`),
   KEY `end_location_id` (`end_location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--Tabell: warnings // NY TABELL
+CREATE TABLE `warnings` (
+  `warning_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `scooter_id` INT NOT NULL,
+  `message` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `resolved` BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`)
+);
 
 -- Tabell: city
 CREATE TABLE `city` (
