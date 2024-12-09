@@ -52,6 +52,19 @@ CREATE TABLE `parkingzone` (
   FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Tabell payment
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_date` timestamp NULL DEFAULT current_timestamp(),
+  `payment_type` enum('prepaid', 'prenumeration') NOT NULL,
+  `status` enum('genomförd', 'misslyckad') DEFAULT 'genomförd',
+  PRIMARY KEY (`payment_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- Tabell: scooter
 CREATE TABLE `scooter` (
   `scooter_id` INT NOT NULL AUTO_INCREMENT,
