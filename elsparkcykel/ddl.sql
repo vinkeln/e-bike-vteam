@@ -81,6 +81,9 @@ CREATE TABLE `scooter` (
   CONSTRAINT `scooter_ibfk_1` FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Add column speed to scooter for the average speed of the scooter
+ALTER TABLE scooter ADD COLUMN speed DECIMAL(5,2) DEFAULT 0.00;
+
 -- Tabell ride
 CREATE TABLE `ride` (
   `ride_id` int(11) NOT NULL AUTO_INCREMENT,
