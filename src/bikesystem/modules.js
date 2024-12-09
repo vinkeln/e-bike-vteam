@@ -24,7 +24,7 @@ async function queryDatabase(query, params = []) {
 // Update the status of a bike
 async function updateStatus(bikeId, locationId, status, speed) {
     return await queryDatabase(
-        "UPDATE scooter SET location_id = ?, status = ?, speed = ? WHERE scooter_id = ?",
+        "UPDATE scooter SET current_location_id = ?, status = ?, speed = ? WHERE scooter_id = ?",
         [locationId, status, speed, bikeId]
     );
 }
@@ -34,13 +34,31 @@ const socket = io("http://localhost:3000");
 
 // Sends a status update to the server
 function sendStatusUpdate() {
+    const maxSpeed = 30; // Top speed 30
+    const realSpeed = getSpeedFromSensor(); // Funktion to get speed from sensor
+    const locationId = getCurrentLocationId(); // Funktion to get location ID
+    const bikeId = 1; // Exampel bike ID
+
+    // Check if the speed exceeds the limit
+    if (realSpeed > maxSpeed) {
+        console.warn(`Speed ${realSpeed} exceeds the limit ${maxSpeed}`);
+        return; // Skip the rest of the function
+    }
+
     const data = {
-        bikeId: 1,
-        locationId: Math.floor(Math.random() * 100),
+        bikeId,
+        locationId,
         status: "active",
-        speed: (Math.random() * 25).toFixed(2),
+        speed: realSpeed,
     };
-    socket.emit("updateStatus", data);
+        // Log the data before sending
+        console.log("Sending data to server:", data);
+    socket.emit("updateStatus", data); // Skicka data till servern
+}
+
+// Funktion to get speed from sensor
+function getSpeedFromSensor() {
+    return (Math.random() * 25).toFixed(2); // Exempel på simulering
 }
 
 // Listen for server responses
@@ -79,18 +97,6 @@ async function stopBike(bikeId) {
         "UPDATE scooter SET status = 'stopped' WHERE scooter_id = ?",
         [bikeId]
     );
-}
-
-// Function to send battery level update to the server
-async function queryDatabase(query, params = []) {
-    let db;
-    try {
-        db = await mysql.createConnection(config);
-        const [result] = await db.query(query, params);
-        return result;
-    } finally {
-        if (db) await db.end();
-    }
 }
 
 // Update the status of a bike

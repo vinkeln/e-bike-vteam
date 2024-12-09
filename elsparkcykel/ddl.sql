@@ -64,7 +64,26 @@ CREATE TABLE `scooter` (
   FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Tabell: warnings
+-- Tabell ride
+CREATE TABLE `ride` (
+  `ride_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `scooter_id` int(11) NOT NULL,
+  `start_location_id` int(11) NOT NULL,
+  `end_location_id` int(11) DEFAULT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `average_speed` decimal(5,2) DEFAULT NULL,
+  `direction` varchar(50) DEFAULT NULL,
+  `cost` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`ride_id`),
+  KEY `user_id` (`user_id`),
+  KEY `scooter_id` (`scooter_id`),
+  KEY `start_location_id` (`start_location_id`),
+  KEY `end_location_id` (`end_location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--Tabell: warnings // NY TABELL
 CREATE TABLE `warnings` (
   `warning_id` INT NOT NULL AUTO_INCREMENT,
   `scooter_id` INT NOT NULL,
