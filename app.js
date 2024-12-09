@@ -80,6 +80,14 @@ app.use((req, res, next) => {
     next(error); // Pass the error to the error-handling middleware
 });
 
+app.use((req, res, next) => {
+    const apiKey = req.query.api_key || req.headers.api_key;
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+        return res.status(403).json({ error: "Forbidden: Invalid API key" });
+    }
+    next();
+});
+
 // Centralized error-handling middleware
 app.use((error, req, res, next) => {
     res.status(error.status || 500); // Use the error's status or default to 500 (Internal Server Error)
