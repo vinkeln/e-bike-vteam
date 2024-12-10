@@ -6,8 +6,10 @@ const {
     updateBatteryLevel,
     getBikesForMaintenance,
     markBikeForMaintenance,
+    isBikeUnderMaintenance,
     startBike,
     stopBike,
+    checkBatteryLevel,
 } = require("../src/bikesystem/modules.js");
 
 const app = express();
@@ -24,7 +26,7 @@ io.on("connection", (socket) => {
 
     // Uppdatera status för en cykel
     socket.on("updateStatus", async (data) => {
-        const { bikeId, locationId, status, speed } = data;
+        const { bikeId, locationId, status, speed } = data; // funktioner för att hämta bikeId, locationId, status och speed
         try {
             const result = await updateStatus(bikeId, locationId, status, speed);
             if (result.affectedRows === 0) {
@@ -41,7 +43,15 @@ io.on("connection", (socket) => {
     // Listen for request to start a bike
     socket.on("startBike", async (bikeId) => {
         try {
+            const underMaintenance = await isBikeUnderMaintenance(bikeId);
+
+            if (underMaintenance) {
+                socket.emit("startError", { message: "Bike is under maintenance and cannot be rented." });
+                return;
+            }
+
             const result = await startBike(bikeId);
+
             if (result.affectedRows === 0) {
                 socket.emit("startError", { message: "Bike not found" });
             } else {
@@ -73,12 +83,18 @@ io.on("connection", (socket) => {
     // Socket to update battery level.
     socket.on("updateBatteryLevel", async (data) => {
         const { bikeId, batteryLevel } = data;
+
         try {
+            // UpdateBatteryLevel function is called and stores battery level in the database.
             const result = await updateBatteryLevel(bikeId, batteryLevel);
+
             if (result.affectedRows === 0) {
                 socket.emit("updateError", { message: "Bike not found" });
             } else {
                 socket.emit("updateBatterySuccess", { message: "Battery level updated" });
+
+                // Check if battery level is low and sends a notification.
+                checkBatteryLevel(bikeId, batteryLevel, io);
             }
         } catch (error) {
             console.error("Error updating battery level:", error.message);
@@ -101,10 +117,17 @@ io.on("connection", (socket) => {
     socket.on("markBikeForMaintenance", async (bikeId) => {
         try {
             const result = await markBikeForMaintenance(bikeId);
+
             if (result.affectedRows === 0) {
                 socket.emit("maintenanceError", { message: "Bike not found" });
             } else {
-                socket.emit("maintenanceSuccess", { message: "Bike marked for maintenance" });
+                socket.emit("maintenanceSuccess", { message: "Bike marked for maintenance." });
+    
+                // Notify with websocket that bike has been marked for maintenance in real-time.
+                io.emit("maintenanceNotification", {
+                    bikeId,
+                    message: `Bike ${bikeId} is marked for maintenance.`,
+                });
             }
         } catch (error) {
             console.error("Error marking bike for maintenance:", error.message);

@@ -58,7 +58,7 @@ function sendStatusUpdate() {
 
 // Funktion to get speed from sensor
 function getSpeedFromSensor() {
-    return (Math.random() * 25).toFixed(2); // Exempel på simulering
+    return (Math.random() * 25).toFixed(2); // Exempel p책 simulering
 }
 
 // Listen for server responses
@@ -99,7 +99,7 @@ async function stopBike(bikeId) {
     );
 }
 
-// Update the status of a bike
+// Update the status of a bikes battery level
 async function updateBatteryLevel(bikeId, batteryLevel) {
     return await queryDatabase("UPDATE scooter SET battery_level = ? WHERE scooter_id = ?", [
         batteryLevel,
@@ -107,14 +107,53 @@ async function updateBatteryLevel(bikeId, batteryLevel) {
     ]);
 }
 
+// Check battery level and notify if it's low
+async function checkBatteryLevel(bikeId, batteryLevel, io) {
+    if (batteryLevel < 20) {
+        console.warn(`Bike ${bikeId} battery level low: ${batteryLevel}%`);
+
+        // Notify all connected clients
+        io.emit("batteryWarning", {
+            bikeId,
+            batteryLevel,
+            message: `Battery level is low (${batteryLevel}%) for bike ${bikeId}.`,
+        });
+
+        // Notify the admin
+        notifyAdmins(bikeId, batteryLevel);
+
+        // Notify the customer
+        notifyCustomer(bikeId, batteryLevel);
+    }
+}
+
+// Function to notify the admins about low battery
+function notifyAdmins(bikeId, batteryLevel) {
+    console.log(`Admin: Bike ${bikeId} has low battery (${batteryLevel}%)`);
+    // Here you can add code to notify the admins via e.g. email or Slack
+}
+
+// Function to notify the customer about low battery
+function notifyCustomer(bikeId, batteryLevel) {
+    console.log(`Customer: Bike ${bikeId} has low battery (${batteryLevel}%)`);
+    // Here you can add code to notify the customer via e.g. SMS or push notification
+}
+
 // Get all bikes that need maintenance
 async function getBikesForMaintenance() {
-    return await queryDatabase("SELECT * FROM scooter WHERE status = 'underhåll'");
+    return await queryDatabase("SELECT * FROM scooter WHERE status = 'underh책ll'");
 }
+
+// Check if a bike is under maintenance
+async function isBikeUnderMaintenance(bikeId) {
+    const result = await queryDatabase("SELECT status FROM scooter WHERE scooter_id = ?", [bikeId]);
+    return result.length > 0 && result[0].status === "underh책ll";
+}
+
 
 // Mark a bike for maintenance
 async function markBikeForMaintenance(bikeId) {
-    return await queryDatabase("UPDATE scooter SET status = 'underhåll' WHERE scooter_id = ?", [
+    return await queryDatabase("UPDATE scooter SET status = 'underh책ll' WHERE scooter_id = ?", [
         bikeId,
     ]);
 }
@@ -127,5 +166,7 @@ module.exports = {
     updateBatteryLevel,
     getBikesForMaintenance,
     markBikeForMaintenance,
+    isBikeUnderMaintenance,
     updateStatus,
+    checkBatteryLevel,
 };
