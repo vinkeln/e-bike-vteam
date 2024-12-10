@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000; // Default port or one specified in the e
 
 // Use Morgan middleware to log incoming HTTP requests
 app.use(morgan('dev'));
+module.exports = app;
 
 // Serve static files from the "public" directory
 app.use(express.static("public"));

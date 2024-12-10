@@ -4,13 +4,15 @@
   "description": "RESTful API for the project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js"
   },
   "author": "LAG KAJl",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
@@ -19,5 +21,8 @@
     "mysql2": "^3.11.5",
     "nodemon": "^3.1.7",
     "promise-mysql": "^5.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^11.0.1"
   }
 }
