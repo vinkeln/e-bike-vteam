@@ -60,7 +60,7 @@ CREATE TABLE `payment` (
   `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_date` timestamp NULL DEFAULT current_timestamp(),
+  `payment_date` timestamp DEFAULT current_timestamp(),
   `payment_type` enum('prepaid', 'prenumeration') NOT NULL,
   `status` enum('genomförd', 'misslyckad') DEFAULT 'genomförd',
   PRIMARY KEY (`payment_id`),
@@ -114,3 +114,7 @@ ALTER TABLE `location`
 ADD CONSTRAINT `fk_location_city`
 FOREIGN KEY (`city_id`) REFERENCES `city`(`city_id`)
 ON DELETE SET NULL;
+
+ALTER TABLE `scooter`
+ADD COLUMN `current_latitude` DOUBLE,
+ADD COLUMN `current_longitude` DOUBLE;

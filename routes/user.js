@@ -201,7 +201,7 @@ router.put("/update/user", checkAuth , async (req, res) => {
 // Endpoint för att uppdatera användarens saldo
 router.put("/update/balance", checkAuth , async (req, res) => {
     const userId  = req.body.user_id;
-    const balance  = req.body.balance;
+    const amount  = req.body.amount;
     
     try {
         
@@ -214,11 +214,41 @@ router.put("/update/balance", checkAuth , async (req, res) => {
         }
 
         // Uppdatera användarens saldo
-        await userModules.updateBalance(userId,balance)
+        await userModules.updateBalance(userId,amount)
         
         res.status(200).json({ message: "Balance has been updated successfully" });
     } catch (error) {
         console.error("Error updating Balance:", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+router.put("/deduct/balance", checkAuth, async (req, res) => {
+    const userId = req.body.user_id; // User ID
+    const amount = req.body.amount; // Amount to deduct
+
+    if (!userId || !amount) {
+        return res.status(400).json({ message: "User ID and amount are required" });
+    }
+
+    try {
+        // Kontrollera om användaren existerar
+        const existingUser = await userModules.getUserid(userId);
+
+        if (existingUser.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        
+
+        // Uppdatera användarens saldo
+        await userModules.deductBalance(userId, amount);
+
+        res.status(200).json({ 
+            message: "Balance has been deducted successfully"
+        });
+    } catch (error) {
+        console.error("Error deducting balance:", error.message);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });

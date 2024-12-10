@@ -117,7 +117,7 @@ async function updateUser(userId,name,email) {
 }
 
 // Funktion för att uppdatera användarens saldo
-async function updateBalance(userId, balance) {
+async function updateBalance(userId, amount) {
     let db = await mysql.createConnection(config); // Skapa anslutning till databasen
     try {
         let sql = `
@@ -127,7 +127,7 @@ async function updateBalance(userId, balance) {
         `;
         
         // Kör SQL-frågan med parametrar
-        await db.execute(sql, [balance, userId]);
+        await db.execute(sql, [amount, userId]);
     } catch (error) {
         console.error("Error updating balance:", error);
         throw error; // Rethrow för att hantera felet högre upp i kedjan
@@ -138,6 +138,27 @@ async function updateBalance(userId, balance) {
     }
 }
 
+// Funktion för att uppdatera användarens saldo
+async function deductBalance(userId, amount) {
+    let db = await mysql.createConnection(config); // Skapa anslutning till databasen
+    try {
+        let sql = `
+            UPDATE user
+            SET balance = balance - ?
+            WHERE user_id = ?;
+        `;
+        
+        // Kör SQL-frågan med parametrar
+        await db.execute(sql, [amount, userId]);
+    } catch (error) {
+        console.error("Error updating balance:", error);
+        throw error; // Rethrow för att hantera felet högre upp i kedjan
+    } finally {
+        if (db) {
+            await db.end(); // Stäng anslutningen
+        }
+    }
+}
 
 module.exports = {
      getUserEmails,
@@ -147,5 +168,6 @@ module.exports = {
      deleteUser,
      updatePassword,
      updateUser,
-     updateBalance
+     updateBalance,
+     deductBalance
 };

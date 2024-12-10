@@ -11,3 +11,4 @@ DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS location;
 
 source ddl.sql;
+source ssl.sql;
