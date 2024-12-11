@@ -1,6 +1,6 @@
-const fetch = require('node-fetch'); // Need to have downloaded 'node-fetch' 
+const fetch = require('node-fetch'); // Ensure 'node-fetch' is installed
 
-// En funktion för att uppdatera status på en cykel via ett externt API
+// Function to update bike status via external API
 async function updateBikeStatus(bikeId, newStatus, apiKey) {
     const apiUrl = `http://localhost:3000/v1/bikes/status/${bikeId}`;
 
@@ -20,13 +20,30 @@ async function updateBikeStatus(bikeId, newStatus, apiKey) {
         if (!response.ok) {
             throw new Error(data.message || "Failed to update bike status");
         }
-        return data;  // Returns the data from the API
+        return data; // Return API response
     } catch (error) {
         console.error("Error updating bike status via API:", error);
-        throw error;  // Throws the error to the calling function
+        throw error; // Rethrow error for the caller
+    }
+}
+
+// Function to handle charging status
+function handleChargingStatus(bikeId, isCharging) {
+    if (isCharging) {
+        const newStatus = 'underhåll';
+        const apiKey = 'key123'; // Replace with the actual API key
+
+        updateBikeStatus(bikeId, newStatus, apiKey)
+            .then(result => {
+                console.log("Bike status updated successfully:", result);
+            })
+            .catch(error => {
+                console.error("Failed to update bike status:", error.message);
+            });
     }
 }
 
 module.exports = {
+    handleChargingStatus,
     updateBikeStatus
 };
