@@ -93,6 +93,26 @@ async function deleteScooter(scooterId) {
     }
 }
 
+// Funktion för att uppdatera resan
+async function updateStatus(status, bikeId) {
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `
+            UPDATE scooter
+            SET
+            status = ?
+            WHERE
+            scooter_id = ?;
+        `;
+        await db.query(sql, [status, bikeId]); // Parametriserad fråga
+    } catch (error) {
+        console.error("Error in updateScooter:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+}
 
 
 module.exports = {
@@ -100,5 +120,6 @@ module.exports = {
     getByBikeId,
     addScooter,
     updateScooter,
-    deleteScooter
+    deleteScooter,
+    updateStatus
 };

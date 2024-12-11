@@ -97,4 +97,29 @@ router.delete("/:bikeId", checkAuth, checkAdmin,async (req, res) => {
 });
 
 
+// Update a bike status in the database.
+router.put("/status/:bikeId", async (req, res) => {
+    let bikeId = req.params.bikeId;
+    let { status} = req.body;
+    try {
+        // Hämta scooter baserat på bikeId
+        const existingScooters = await scooterModules.getByBikeId(bikeId);
+
+      
+        // Kontrollera om scooter existerar
+        // Om ingen scooter hittas, returnera 401
+        if (existingScooters.length === 0) {
+            return res.status(404).json({
+                message: "Scooter not found"
+            });
+        }
+
+        await scooterModules.updateStatus(status, bikeId)
+
+        return res.status(200).json({ message: "Scooter updated" });
+    } catch (error) {
+        res.status(500).json({ error: "Server Error", details: error.message });
+    }
+});
+
 module.exports = router;
