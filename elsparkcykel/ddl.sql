@@ -108,3 +108,7 @@ CREATE TABLE `warnings` (
   FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`scooter_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE scooter
+ADD COLUMN current_latitude DOUBLE,
+ADD COLUMN current_longitude DOUBLE;

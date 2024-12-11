@@ -8,6 +8,7 @@ const citiesRoutes = require("./routes/cities.js"); // Cities routes file
 const parkingsRoutes = require("./routes/parkings.js"); // Parkings routes file
 const userRoutes = require("./routes/user.js"); // User routes file
 const travelsRoutes = require("./routes/travels.js"); // Travels routes file
+const { moveCykel } = require("./bikesystem/movment/bikemovement.js");
 const port = process.env.PORT || 3000; // Default port or one specified in the environment
 
 // Use Morgan middleware to log incoming HTTP requests
@@ -37,6 +38,12 @@ app.use((req, res, next) => {
     console.log(`got a request ${req.path} (${req.method})`);
     next();
 });
+
+const stockholmLat = 59.3293;
+const stockholmLong = 18.0686;
+
+// Start the bike movement
+moveCykel(stockholmLat, stockholmLong);
 
 // Rate limiting middleware to restrict the number of requests per minute
 const limiter = rateLimit({
