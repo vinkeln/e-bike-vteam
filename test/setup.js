@@ -5,12 +5,16 @@ chai.use(chaiHttp);
 
 let server;
 
-before((done) => {
+server = app.listen(0, () => { // 0 tilldelar en dynamisk port
+  console.log('Server started at address:', server.address());
+  done();
+});
+/*before((done) => {
     server = app.listen(0, () => { // 0 låter systemet tilldela en dynamisk port
       console.log('Server started at address:', server.address());
       done();
     });
-  });
+  });*/
   
 
 after((done) => {
