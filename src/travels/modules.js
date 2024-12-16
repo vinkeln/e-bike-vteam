@@ -47,7 +47,7 @@ async function addTravel(userId, scooterId, startLocationId, startTime, cost) {
     }
 }
 // Funktion för att uppdatera resan
-async function updateTravel(endLocationId, endTime, cost, rideId) {
+async function updateTravel( endTime, cost, rideId, end_location_id) {
     const db = await mysql.createConnection(config);
     try {
         // Starta transaktionen
@@ -56,13 +56,13 @@ async function updateTravel(endLocationId, endTime, cost, rideId) {
         // Uppdatera information om resan
         let sql = `
             UPDATE ride 
-            SET 
+            SET
             end_location_id = ?,
             end_time = ?,
             cost = cost + ?
             WHERE ride_id = ?;
         `;
-        await db.query(sql, [endLocationId, endTime, cost, rideId]);
+        await db.query(sql, [end_location_id, endTime, cost, rideId]);
 
         // Hämta scooter_id från resan för att uppdatera status
         let getScooterSql = `SELECT scooter_id FROM ride WHERE ride_id = ?`;

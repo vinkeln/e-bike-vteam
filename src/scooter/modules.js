@@ -34,14 +34,30 @@ async function getByBikeId(bikeId) {
     }
 }
 
-
-// Funktion för att skapa en ny resa
-async function addScooter(currentLocationId, batteryLevel, lastServiceDate, currentLongitude, currentLatitude) {
+async function getByBikeSerialNum(bikeSerialNum) {
 
     let db = await mysql.createConnection(config);
     try {
-        let sql = `INSERT INTO scooter (current_location_id, battery_level, last_service_date, current_longitude, current_latitude) VALUES ( ?, ?, ?, ?, ?)`;
-        await db.query(sql, [currentLocationId, batteryLevel, lastServiceDate, currentLongitude, currentLatitude]); // Parametriserad fråga
+        let sql = `SELECT * FROM scooter WHERE bike_serial_number = ?;`;
+        let [result] = await db.query(sql, [bikeSerialNum]); // Parametriserad fråga
+        return result;
+    } catch (error) {
+        console.error("Error in getByBikeId:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+}
+
+
+
+// Funktion för att skapa en ny resa
+async function addScooter(bike_serial_number, currentLocationId, batteryLevel, lastServiceDate, currentLongitude, currentLatitude) {
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `INSERT INTO scooter (bike_serial_number, current_location_id, battery_level, last_service_date, current_longitude, current_latitude) VALUES ( ?,?, ?, ?, ?, ?)`;
+        await db.query(sql, [bike_serial_number, currentLocationId, batteryLevel, lastServiceDate, currentLongitude, currentLatitude]); // Parametriserad fråga
         // return userId;
     } catch (error) {
         console.error("Error in addTravel:", error.message);
@@ -121,5 +137,6 @@ module.exports = {
     addScooter,
     updateScooter,
     deleteScooter,
-    updateStatus
+    updateStatus,
+    getByBikeSerialNum
 };

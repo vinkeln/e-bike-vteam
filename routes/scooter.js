@@ -31,11 +31,21 @@ router.get("/:bikeId", checkAuth, async (req, res) => {
 });
 
 // Add a bike to the database.
-router.post("/", checkAuth, checkAdmin, async (req, res) => {
-    let { current_location_id , battery_level,last_service_date, current_longitude, current_latitude } = req.body;
+router.post("/", async (req, res) => {
+    let { bike_serial_number, current_location_id , battery_level,last_service_date, current_longitude, current_latitude } = req.body;
     try {
+        // Hämta scooter baserat på bikeId
+        const existingScooters = await scooterModules.getByBikeSerialNum(bike_serial_number);
 
-        await scooterModules.addScooter(current_location_id , battery_level,last_service_date, current_longitude, current_latitude )
+      
+        // Kontrollera om scooter existerar
+        // Om ingen scooter hittas, returnera 401
+        if (existingScooters.length > 0) {
+            // Returnera 200 med ett meddelande att cykeln redan finns
+            return res.status(200).json({ message: "Bike already exists" });
+        }
+
+        await scooterModules.addScooter(bike_serial_number, current_location_id , battery_level,last_service_date, current_longitude, current_latitude )
 
         return res.status(201).json({ message: "Scooter added"});
     } catch (error) {
@@ -44,7 +54,7 @@ router.post("/", checkAuth, checkAdmin, async (req, res) => {
 });
 
 // Update a bike in the database.
-router.put("/", checkAuth, checkAdmin,async (req, res) => {
+router.put("/", async (req, res) => {
     let scooterId = req.body.scooter_id;
     let { current_location_id, battery_level, status, last_service_date} = req.body;
     try {

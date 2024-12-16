@@ -3,7 +3,8 @@ const router = express.Router();
 const checkAuth = require("../middleware/check-auth.js");
 const checkAdmin = require("../middleware/check-admin.js"); // Middleware för att kontrollera administratörsbehörighet
 const travelsModules = require("../src/travels/modules.js"); // Moduler för databashantering relaterade till resor
-
+const chargingstationsModules = require("../src/chargingstations/modules.js"); // Moduler för databashantering relaterade till resor
+const { checkScooterAvailability } = require("../src/travels/socketUtils");
 
 // Get a list over all the travels in the system.
 router.get("/", checkAuth, checkAdmin, async (req, res) => { // Requires authentication = checkAuth
@@ -22,13 +23,20 @@ router.get("/", checkAuth, checkAdmin, async (req, res) => { // Requires authent
 // Create a new trip when a customer hires a bike.
 router.post("/", checkAuth, async (req, res) => {
     // Accepts user_id, scooter_id, start_location_id, start_time as body parameters.
-    let  { user_id, scooter_id, start_location_id, start_time, cost } = req.body;
+    const  { user_id, scooter_id, start_location_id, start_time, cost } = req.body;
 
     if (!user_id || !scooter_id || !start_location_id || !start_time || !cost) {
         return res.status(400).json({ error: "All inputs are needed!" });
     }
 
     try {
+
+        // Kontrollera med socket-servern om cykeln är tillgänglig
+        const socketResponse = await checkScooterAvailability(scooter_id, user_id,"requestRide");
+        if (!socketResponse.available) {
+            return res.status(400).json({ error: "Scooter is not available or not connected" });
+        }
+
         const result = await travelsModules.addTravel(user_id, scooter_id, start_location_id, start_time, cost);
 
         res.status(201).json({ message: "New trip has been added", rideId: result });
@@ -39,11 +47,14 @@ router.post("/", checkAuth, async (req, res) => {
 
 // Update a specific travel.
 router.put("/", checkAuth, async (req, res) => {
-    let { end_location_id, end_time, cost, ride_id} = req.body;
+    let { end_time, cost, ride_id, scooter_id, user_id, end_location_id} = req.body;
 
     if (!end_location_id || !end_time || !cost) {
         return res.status(400).json({ error: "All inputs are needed!" });
     }
+
+    
+
 
     // Kontrollera om ride id finns i databasen
     const existingRide = await travelsModules.getByRideId(ride_id);
@@ -51,7 +62,22 @@ router.put("/", checkAuth, async (req, res) => {
         return res.status(409).json({ message: "Travel not found" });
     }
     try {
-        await travelsModules.updateTravel(end_location_id, end_time, cost, ride_id);
+
+        const chargingStation = await chargingstationsModules.getChargingStationLocation(end_location_id);
+        if (chargingStation.length > 0) {
+            // Kontrollera med socket-servern om cykeln är tillgänglig
+            const socketResponse = await checkScooterAvailability(scooter_id, user_id,"startCharging");
+            if (!socketResponse.available) {
+                return res.status(400).json({ error: "Scooter is charging" });
+            }
+
+        } else {// Kontrollera med socket-servern om cykeln är tillgänglig
+         const socketResponse = await checkScooterAvailability(scooter_id, user_id,"stopRide");
+         if (!socketResponse.available) {
+             return res.status(400).json({ error: "Scooter is not available or not connected" });
+         }
+        }
+        await travelsModules.updateTravel( end_time, cost, ride_id, end_location_id);
 
         res.status(200).json({ message: "Trip has been updated!" });
     } catch (error) {

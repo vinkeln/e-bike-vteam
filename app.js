@@ -2,6 +2,8 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
+const http = require("http"); // För att skapa en HTTP-server
+const initializeSocketHandlers = require("./sockets/socketHandlers.js"); // Din Socket.IO-handler
 const morgan = require("morgan"); // Middleware for logging HTTP requests
 const rateLimit = require("express-rate-limit"); // Middleware to limit repeated requests
 const citiesRoutes = require("./routes/cities.js"); // Cities routes file
@@ -97,7 +99,12 @@ app.use((error, req, res, next) => {
     });
 });
 
+
+// Create HTTP Server and Integrate Socket.IO
+const server = http.createServer(app);
+initializeSocketHandlers(server); // Starta Socket.IO
+
 // Start the server and listen on the specified port
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`server is listening on port: ${port}`);
 });

@@ -73,7 +73,8 @@ CREATE TABLE `scooter` (
   `scooter_id` int(11) NOT NULL AUTO_INCREMENT,
   `current_location_id` int(11) DEFAULT NULL,
   `battery_level` int(11) NOT NULL,
-  `status` enum('ledig', 'upptagen', 'underhåll') DEFAULT 'ledig',
+  `status` enum('ledig', 'upptagen', 'underhåll'. 'avstänged') DEFAULT 'ledig',
+  `speed` DECIMAL(5,2) DEFAULT NULL,
   `last_service_date` date DEFAULT NULL,
   PRIMARY KEY (`scooter_id`),
   KEY `current_location_id` (`current_location_id`),
@@ -85,7 +86,7 @@ CREATE TABLE `ride` (
   `ride_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `scooter_id` int(11) NOT NULL,
-  `start_location_id` int(11) NOT NULL,
+  `start_location_id` int(11) DEFAULT NULL,
   `end_location_id` int(11) DEFAULT NULL,
   `start_time` datetime NOT NULL,
   `end_time` datetime DEFAULT NULL,
@@ -118,3 +119,19 @@ ON DELETE SET NULL;
 ALTER TABLE `scooter`
 ADD COLUMN `current_latitude` DOUBLE,
 ADD COLUMN `current_longitude` DOUBLE;
+
+ALTER TABLE `scooter`
+ADD COLUMN `bike_serial_number` VARCHAR(50) NOT NULL UNIQUE AFTER `scooter_id`;
+
+--Tabell: warnings // NY TABELL
+CREATE TABLE `warnings` (
+  `warning_id` INT NOT NULL AUTO_INCREMENT,
+  `scooter_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `message` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `resolved` BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (`warning_id`),
+  FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`scooter_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
