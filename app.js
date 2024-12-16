@@ -9,6 +9,8 @@ const parkingsRoutes = require("./routes/parkings.js"); // Parkings routes file
 const userRoutes = require("./routes/user.js"); // User routes file
 const chargingStationsRoutes = require("./routes/chargingstations.js"); // chargingstations routes file
 const travelsRoutes = require("./routes/travels.js"); // Travels routes file
+const bikesRoutes = require("./routes/scooter.js"); // bikes routes file
+const paymentsRoutes = require("./routes/payment.js"); // payment routes file
 const port = process.env.PORT || 3000; // Default port or one specified in the environment
 
 // Use Morgan middleware to log incoming HTTP requests
@@ -51,6 +53,7 @@ app.use(limiter); // Apply rate limiting globally
 // Middleware to handle API key authentication
 app.use((req, res, next) => {
     let apiKey; // Variable to store the API key
+    
 
     // Extract API key from the query string for GET requests
     if (req.method === 'GET') {
@@ -75,6 +78,8 @@ app.use("/v1/parking", parkingsRoutes); // All parking-related routes start with
 app.use("/v1/user", userRoutes); // All user-related routes start with /v1/user
 app.use("/v1/travels", travelsRoutes); // All travels-related routes start with /v1/travels
 app.use("/v1/chargingstations", chargingStationsRoutes); // All travels-related routes start with /v1/travels
+app.use("/v1/bikes", bikesRoutes); // All bikes-related routes start with /v1/bikes
+app.use("/v1/payment", paymentsRoutes); // All payment-related routes start with /v1/payment
 
 // Middleware to handle routes that are not defined (404 errors)
 app.use((req, res, next) => {
