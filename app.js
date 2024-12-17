@@ -105,3 +105,5 @@ app.use((error, req, res, next) => {
 app.listen(port, () => {
     console.log(`server is listening on port: ${port}`);
 });
+
+module.exports = app; // Export the Express app to be used in tests

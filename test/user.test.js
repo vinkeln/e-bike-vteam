@@ -1,7 +1,28 @@
-let chaiHttp = require('chai-http');
-let {server, chai } = require('./setup');
-let app = require('../app');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../app');
+require('dotenv').config(); // Läs in .env-filen
 chai.use(chaiHttp);
+
+describe('User API', () => {
+  let server;
+
+  // Start servern innan testerna körs
+  before((done) => {
+    server = app.listen(0, () => {
+      const port = server.address().port; 
+      chai.request(`http://localhost:${port}`);
+      done();
+    });
+  });
+  
+
+  // Stäng servern efter att testerna är klara
+  after((done) => {
+    server.close(() => {
+      done();
+    });
+  });
 
 // Test för users API
   describe('User API', () => {
@@ -47,4 +68,5 @@ chai.use(chaiHttp);
           done();
         });
     });
+  });
   });
