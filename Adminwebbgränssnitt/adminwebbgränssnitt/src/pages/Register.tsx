@@ -2,9 +2,11 @@ import RegisterForm from "../components/RegisterForm";
 import authModules from "../../modules/auths.ts";
 import Alert from "../components/Alert.tsx";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [checkRegister, setCheckRegister] = useState(false);
+  const navigate = useNavigate();
 
   const handleFormSubmit = async (values: {
     name: string;
@@ -21,6 +23,7 @@ const Register = () => {
 
       if (result === "ok") {
         await authModules.login(values.email, values.password);
+        navigate("/");
       } else {
         setCheckRegister(true); // Visa ett felmeddelande
       }

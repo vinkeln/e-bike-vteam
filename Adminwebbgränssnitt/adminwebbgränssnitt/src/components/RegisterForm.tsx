@@ -65,7 +65,7 @@ const RegisterForm = ({ onSubmit }: Props) => {
         />
       </div>
       <button type="submit" className="btn btn-primary">
-        Submit
+        Registera
       </button>
     </form>
   );

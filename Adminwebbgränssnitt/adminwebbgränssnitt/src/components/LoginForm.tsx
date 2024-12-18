@@ -24,7 +24,7 @@ const LoginForm = ({ onSubmit }: Props) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
-        <label htmlFor="exampleInputEmail1" className="form-label">
+        <label htmlFor="email" className="form-label">
           Email address
         </label>
         <input
@@ -37,7 +37,7 @@ const LoginForm = ({ onSubmit }: Props) => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="exampleInputPassword1" className="form-label">
+        <label htmlFor="password" className="form-label">
           Password
         </label>
         <input
@@ -51,7 +51,7 @@ const LoginForm = ({ onSubmit }: Props) => {
       </div>
 
       <button type="submit" className="btn btn-primary">
-        Submit
+        Login
       </button>
     </form>
   );
