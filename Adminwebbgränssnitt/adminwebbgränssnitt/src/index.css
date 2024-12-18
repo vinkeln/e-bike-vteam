@@ -1,4 +1,12 @@
-:root {
+body {
+  margin: 1rem;
+  padding: 1rem;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +73,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
