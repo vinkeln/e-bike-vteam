@@ -28,7 +28,7 @@ app.use(express.json());
 // Middleware to set up CORS (Cross-Origin Resource Sharing) headers
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
-  res.header("Access-Control-Allow-Headers", "*"); // Allow all headers
+  res.header("Access-Control-Allow-Headers", "Authorization, Content-Type, *"); // Allow all headers
   if (req.method === "OPTIONS") {
     // Allow specific HTTP methods for preflight requests
     res.header("Access-Control-Allow-Methods", "PUT, GET, POST, PATCH, DELETE");
