@@ -57,7 +57,7 @@ const auth = {
     } else if (result.message === 'Auth successful') {
       
       this.token = result.token;
-      // console.log(this.token);
+      console.log(this.token);
       return "ok";
     } else {
       return "Unexpected error occurred.";

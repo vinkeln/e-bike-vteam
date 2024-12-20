@@ -45,6 +45,16 @@ function Navbar() {
                 Contact
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/chargingStations">
+                Charing Stations
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/customers">
+                Customers
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

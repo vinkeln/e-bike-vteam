@@ -31,7 +31,7 @@ router.get("/:cityId", async (req, res) => {
     const cityId = req.params.cityId;
     try {
 
-       
+
         // Kontrollerar om den stad finns
         const existingpcities = await citiesModules.checkCitiesById(cityId);
         if (!existingpcities || existingpcities.length === 0) {
@@ -69,7 +69,7 @@ router.post("/add", checkAuth, checkAdmin, async (req, res) => {
             return res.status(409).json({ message: "Chargingstation exists" }); // Konflikt om platsen redan finns
         }
 
-        
+
         // Lägger till den nya laddningsstation i databasen
         const result = await chargingStationsModules.addChargingStation(latitude, longitude, cityId ,totalPorts);
 
@@ -80,7 +80,6 @@ router.post("/add", checkAuth, checkAdmin, async (req, res) => {
                 error: result.error,
             });
         }
-
 
         res.status(200).json({
             status: "success",
@@ -101,10 +100,10 @@ router.post("/add", checkAuth, checkAdmin, async (req, res) => {
 router.delete("/:locationId", checkAuth , checkAdmin, async (req, res) => {
     const  locationId  = req.params.locationId; // Hämtar locationId från URL-parametern
 
-    
+
 
     try {
-        
+
 
         // Kontrollera om laddstaion finns
         const existingChargingStations = await chargingStationsModules.getChargingStationLocation(locationId);
@@ -131,10 +130,10 @@ router.put("/update", checkAuth , checkAdmin, async (req, res) => {
     const  locationId  = req.body.location_id; // Hämtar locationId från request-body
     const {latitude, longitude} = req.body; // Extraherar uppdaterad data
     const totalPorts = req.body.total_ports;
-    
+
 
     try {
-        
+
 
         // Kontrollera om laddstation finns
         const existingChargingStations = await chargingStationsModules.getChargingStationLocation(locationId);
@@ -157,10 +156,10 @@ router.put("/update", checkAuth , checkAdmin, async (req, res) => {
 router.put("/update/port", checkAuth , checkAdmin, async (req, res) => {
     const  locationId  = req.body.location_id; // Hämtar locationId från request-body
     const newPorts = req.body.new_ports;
-    
+
 
     try {
-        
+
 
         // Kontrollera om laddstation finns
         const existingChargingStations = await chargingStationsModules.getChargingStationLocation(locationId);
