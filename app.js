@@ -89,6 +89,14 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1]; // "Bearer <token>"
+    if (!token || token !== 'valid-token') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+});
+
+app.use((req, res, next) => {
     const apiKey = req.query.api_key || req.headers.api_key;
     if (!apiKey || apiKey !== process.env.API_KEY) {
         return res.status(403).json({ error: "Forbidden: Invalid API key" });

@@ -104,6 +104,7 @@ router.post("/login",async (req,res) => {
 });
 
 
+
 // Endpoint för att ta bort en användare
 router.delete("/:userId", checkAuth , async (req, res) => {
     const  userId  = req.params.userId; // Hämta användarens ID från URL-parametern

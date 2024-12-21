@@ -12,6 +12,7 @@ CREATE TABLE `city` (
 -- Tabell: location
 CREATE TABLE `location` (
   `location_id` INT NOT NULL AUTO_INCREMENT,
+  `location_name` VARCHAR(255) DEFAULT NULL,
   `latitude` DECIMAL(10,8) NOT NULL,
   `longitude` DECIMAL(11,8) NOT NULL,
   `type` ENUM('laddstation', 'parkeringszon', 'resa') NOT NULL,
@@ -65,17 +66,19 @@ CREATE TABLE `payment` (
   CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Tabell: scooter
+-- Tabell scooter
 CREATE TABLE `scooter` (
-  `scooter_id` INT NOT NULL AUTO_INCREMENT,
-  `current_location_id` INT DEFAULT NULL,
-  `battery_level` INT NOT NULL,
+  `scooter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `current_location_id` int(11) DEFAULT NULL,
+  `battery_level` int(11) NOT NULL,
+  `status` enum('ledig', 'upptagen', 'underhåll', 'avstänged') DEFAULT 'ledig',
   `speed` DECIMAL(5,2) DEFAULT NULL,
-  `status` ENUM('ledig', 'upptagen', 'underhåll') DEFAULT 'ledig',
-  `last_service_date` DATE DEFAULT NULL,
+  `last_service_date` date DEFAULT NULL,
   PRIMARY KEY (`scooter_id`),
-  FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
+  KEY `current_location_id` (`current_location_id`),
+  CONSTRAINT `scooter_ibfk_1` FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- Tabell ride
 CREATE TABLE `ride` (
