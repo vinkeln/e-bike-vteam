@@ -63,7 +63,7 @@ const ChargingStationsMap = () => {
 
     return (
         <>
-            <MapContainer center={defaultCenter} zoom={13} style={{ height: '100vh', width: '100%' }}>
+            <MapContainer center={defaultCenter} zoom={13} style={{ height: '80vh', width: '80%' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

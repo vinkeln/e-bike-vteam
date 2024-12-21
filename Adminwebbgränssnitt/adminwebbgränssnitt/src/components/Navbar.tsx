@@ -46,8 +46,8 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/chargingStations">
-                Charing Stations
+              <Link className="nav-link" to="/mapRender">
+                Map
               </Link>
             </li>
             <li className="nav-item">
