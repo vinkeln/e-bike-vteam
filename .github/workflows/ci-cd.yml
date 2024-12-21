@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out repository
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # 2. Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Set up environment variables
+      - name: Set up environment variables
+        run: | 
+          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
+          echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> .env
+
+      # 5. Run tests
+      - name: Run tests
+        run: npm test
+
+      # 6. Lint code
+      - name: Run ESLint
+        run: npx eslint .
+
+      # 7. Upload coverage report (optional)
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/

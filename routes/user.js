@@ -6,6 +6,11 @@ const router = express.Router(); // Skapa en Express-router
 const userModules = require("../src/user/modules.js"); // Moduler för databashantering relaterade till användare
 const checkAuth = require("../middleware/check-auth.js"); // Middleware för att kontrollera autentisering
 const checkAdmin = require("../middleware/check-admin.js"); // Middleware för att kontrollera administratörsbehörighet
+//Test implementation
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const app = require("../app");
+const { expect } = chai;
 
 // Endpoint för att hämta alla användare, endast tillgängligt för inloggade administratörer
 router.get("/users", checkAuth, checkAdmin, async (req, res) => {

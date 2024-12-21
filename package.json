@@ -11,8 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
@@ -25,6 +23,12 @@
     "supertest": "^7.0.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "sinon": "^19.0.2"
+=======
+    "chai": "^4.3.6",
+    "chai-http": "^4.4.0",
+    "mocha": "^11.0.1"
+>>>>>>> 85455d5169b65ee872144f045dea4a51c24c4570
   }
 }
