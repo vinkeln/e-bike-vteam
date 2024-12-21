@@ -78,13 +78,6 @@ const ChargingStationsMap = () => {
                     </Marker>
                 ))}
             </MapContainer>
-            <form onSubmit={handleSubmit}>
-                <input type="text" value={formData.latitude} onChange={(e) => setFormData({...formData, latitude: e.target.value})} placeholder="Latitude" />
-                <input type="text" value={formData.longitude} onChange={(e) => setFormData({...formData, longitude: e.target.value})} placeholder="Longitude" />
-                <input type="text" value={formData.city_id} onChange={(e) => setFormData({...formData, city_id: e.target.value})} placeholder="City ID" />
-                <input type="number" value={formData.total_ports} onChange={(e) => setFormData({...formData, total_ports: e.target.value})} placeholder="Total Ports" />
-                <button type="submit">Add Charging Station</button>
-            </form>
         </>
     );
 };
