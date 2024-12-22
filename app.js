@@ -1,5 +1,6 @@
 "use strict";
 require('dotenv').config();
+console.log("Loaded API_KEY:", process.env.API_KEY);
 const express = require("express");
 const app = express();
 const http = require("http"); // För att skapa en HTTP-server
