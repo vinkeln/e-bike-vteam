@@ -1,9 +1,10 @@
 interface Props {
   message: string;
+  color: string;
 }
-const Alert = ({ message }: Props) => {
+const Alert = ({ message, color }: Props) => {
   return (
-    <div className="alert alert-danger" role="alert">
+    <div className={"alert " + color} role="alert">
       {message}
     </div>
   );

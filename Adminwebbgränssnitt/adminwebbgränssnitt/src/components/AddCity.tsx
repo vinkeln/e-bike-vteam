@@ -1,22 +1,18 @@
 import { useState } from "react";
-
 interface Props {
-  onSubmit: (values: { name: string; email: string; password: string }) => void;
+  onSubmit: (values: { name: string; country: string }) => void;
 }
-
-const RegisterForm = ({ onSubmit }: Props) => {
+const AddCity = ({ onSubmit }: Props) => {
   const [formValues, setFormValues] = useState({
     name: "",
-    email: "",
-    password: "",
+    country: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formValues.name) newErrors.name = "Name is required";
-    if (!formValues.email) newErrors.email = "Email is required";
-    if (!formValues.password) newErrors.password = "Password is required";
+    if (!formValues.country) newErrors.country = "Country is required";
 
     return newErrors;
   };
@@ -38,12 +34,11 @@ const RegisterForm = ({ onSubmit }: Props) => {
     setErrors({});
     onSubmit(formValues); // Anropa `onSubmit` med formvärdena
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
-          Name
+          City name
         </label>
         <input
           type="text"
@@ -56,40 +51,27 @@ const RegisterForm = ({ onSubmit }: Props) => {
         {errors.name && <small className="text-danger">{errors.name}</small>}
       </div>
       <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email address
+        <label htmlFor="country" className="form-label">
+          Country
         </label>
         <input
-          type="email"
+          type="text"
           className="form-control"
-          id="email"
-          name="email"
-          value={formValues.email}
+          id="country"
+          name="country"
+          value={formValues.country}
           onChange={handleChange}
         />
-        {errors.email && <small className="text-danger">{errors.email}</small>}
-      </div>
-      <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          name="password"
-          value={formValues.password}
-          onChange={handleChange}
-        />
-        {errors.password && (
-          <small className="text-danger">{errors.password}</small>
+        {errors.country && (
+          <small className="text-danger">{errors.country}</small>
         )}
       </div>
+
       <button type="submit" className="btn btn-primary">
-        Registera
+        Add
       </button>
     </form>
   );
 };
 
-export default RegisterForm;
+export default AddCity;

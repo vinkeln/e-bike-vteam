@@ -36,7 +36,10 @@ const Register = () => {
   return (
     <>
       {checkRegister && (
-        <Alert message="Registration failed. Please try again." />
+        <Alert
+          color="alert-danger"
+          message="Registration failed. Please try again."
+        />
       )}
       <RegisterForm onSubmit={handleFormSubmit} />
     </>

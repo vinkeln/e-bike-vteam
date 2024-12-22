@@ -1,6 +1,6 @@
 import auth from "../../modules/auths.ts";
 import { useState, useEffect } from "react";
-
+import AddButtons from "../components/AddButtons.tsx";
 function Home() {
   const [tokenChecker, setTokenChecker] = useState(true);
 
@@ -15,6 +15,9 @@ function Home() {
     <>
       {tokenChecker && <h1>hello</h1>}
       <h1>Welcome to home page</h1>
+      <AddButtons page="addcity" text="city" />
+      <AddButtons page="addparking" text="parking" />
+      <AddButtons page="addstation" text="charging station" />
     </>
   );
 }

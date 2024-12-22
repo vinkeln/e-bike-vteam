@@ -10,6 +10,16 @@ const LoginForm = ({ onSubmit }: Props) => {
     password: "",
   });
 
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!formValues.email) newErrors.email = "Email is required";
+    if (!formValues.password) newErrors.password = "Password is required";
+
+    return newErrors;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -19,6 +29,12 @@ const LoginForm = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+    setErrors({});
     onSubmit(formValues); // Anropa `onSubmit` med formvärdena
   };
   return (
@@ -35,6 +51,7 @@ const LoginForm = ({ onSubmit }: Props) => {
           value={formValues.email}
           onChange={handleChange}
         />
+        {errors.email && <small className="text-danger">{errors.email}</small>}
       </div>
       <div className="mb-3">
         <label htmlFor="password" className="form-label">
@@ -48,6 +65,9 @@ const LoginForm = ({ onSubmit }: Props) => {
           value={formValues.password}
           onChange={handleChange}
         />
+        {errors.password && (
+          <small className="text-danger">{errors.password}</small>
+        )}
       </div>
 
       <button type="submit" className="btn btn-primary">

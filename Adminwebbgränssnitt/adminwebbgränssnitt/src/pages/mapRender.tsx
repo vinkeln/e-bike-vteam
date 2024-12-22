@@ -1,63 +1,77 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import auth from "../../modules/auths.ts";
+import { MapMarkers, Bike, ChargingStation, ParkingZone } from '../components/MapMarkers.tsx'; // Säkerställ att sökvägarna är korrekta
 
 const ChargingStationsMap = () => {
-    const [stations, setStations] = useState([]); // Säkerställ att stations är en tom lista initialt
-    const [formData, setFormData] = useState({ latitude: '', longitude: '', city_id: '', total_ports: '', api_key: 'key123' });
+    const [stations, setStations] = useState<ChargingStation[]>([
+        { 
+            station_id: 3, 
+            latitude: 59.3273, 
+            longitude: 18.0666, 
+            total_ports: 10, 
+            available_ports: 5 
+        } // Coded chargingStation object on to the map.
+    ]);
+    const [bikes, setBikes] = useState<Bike[]>([
+        { id: 1, latitude: 59.3294, longitude: 18.0687, status: 'Ledig' },
+        { id: 2, latitude: 59.3396, longitude: 18.0690, status: 'Upptagen' }
+    ]); // Coded bike object on to the map.
+    const [parkingZones, setParkingZones] = useState<ParkingZone[]>([
+        {
+            zone_id: 4,
+            latitude: 59.3170,
+            longitude: 18.0665,
+            max_speed: 20,
+            capacity: 25
+        }
+    ]);
     const defaultCenter = [59.3293, 18.0686];
 
     useEffect(() => {
-        setFormData(prev => ({ ...prev, city_id: '1' }));
         fetchStations();
+        fetchParkingZones();
     }, []);
 
     const fetchStations = () => {
         fetch('http://localhost:3000/v1/chargingstations', {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${auth.token}`  // Använder token från auth-modulen
+                "Authorization": `Bearer ${auth.token}`
             }
         })
         .then(res => res.json())
         .then(data => {
-            if (data.chargingStations) {
-                setStations(data.chargingStations);
+            if (data.chargingStations && data.chargingStations.length > 0) {
+                setStations(data.chargingStations); // Data from the API
             } else {
-                console.error("No stations data found");
+                console.error("Inga stationer hittades");
             }
         })
         .catch(err => {
-            console.error("Failed to fetch charging stations:", err);
+            console.error("Misslyckades med att hämta laddningsstationer:", err);
             setStations([]);
         });
     };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        fetch('http://localhost:3000/v1/chargingstations/add', {
-            method: 'POST',
+    const fetchParkingZones = () => {
+        fetch('http://localhost:3000/v1/parkingzones', {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${auth.token}`  // Inkludera tokenen här
-            },
-            body: JSON.stringify(formData) // inkludera api key i body
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Server responded with an error!');
+                "Authorization": `Bearer ${auth.token}`
             }
         })
+        .then(res => res.json())
         .then(data => {
-            console.log(data);
-            fetchStations();  // Uppdatera laddningsstationerna på kartan
+            if (data.parkingZones && data.parkingZones.length > 0) {
+                setParkingZones(data.parkingZones);
+            } else {
+                console.error("Inga parkeringszoner hittades");
+            }
         })
-        .catch(error => {
-            console.error('Error adding charging station:', error);
-            setStations([]);
+        .catch(err => {
+            console.error("Misslyckades med att hämta parkeringszoner:", err);
+            setParkingZones([]);
         });
     };
 
@@ -68,15 +82,7 @@ const ChargingStationsMap = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {stations.map(station => (
-                    <Marker key={station.station_id} position={[station.latitude, station.longitude]}>
-                        <Popup>
-                            Station ID: {station.station_id}<br />
-                            Total Ports: {station.total_ports}<br />
-                            Available Ports: {station.available_ports}
-                        </Popup>
-                    </Marker>
-                ))}
+                <MapMarkers bikes={bikes} chargingStations={stations} parkingZones={parkingZones} />
             </MapContainer>
         </>
     );
