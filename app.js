@@ -16,7 +16,12 @@ const paymentsRoutes = require("./routes/payment.js"); // payment routes file
 const port = process.env.PORT || 3000; // Default port or one specified in the environment
 
 // Use Morgan middleware to log incoming HTTP requests
+<<<<<<< HEAD
 app.use(morgan("dev"));
+=======
+app.use(morgan('dev'));
+module.exports = app;
+>>>>>>> apitest
 
 // Serve static files from the "public" directory
 app.use(express.static("public"));
@@ -53,7 +58,12 @@ app.use(limiter); // Apply rate limiting globally
 
 // Middleware to handle API key authentication
 app.use((req, res, next) => {
+<<<<<<< HEAD
   let apiKey; // Variable to store the API key
+=======
+    let apiKey; // Variable to store the API key
+    
+>>>>>>> apitest
 
   // Extract API key from the query string for GET requests
   if (req.method === "GET") {
@@ -81,7 +91,11 @@ app.use("/v1/cities", citiesRoutes); // All city-related routes start with /v1/c
 app.use("/v1/parking", parkingsRoutes); // All parking-related routes start with /v1/parking
 app.use("/v1/user", userRoutes); // All user-related routes start with /v1/user
 app.use("/v1/travels", travelsRoutes); // All travels-related routes start with /v1/travels
+<<<<<<< HEAD
 app.use("/v1/chargingstations", chargingStationsRoutes); // All chargingstations-related routes start with /v1/chargingstations
+=======
+app.use("/v1/chargingstations", chargingStationsRoutes); // All travels-related routes start with /v1/travels
+>>>>>>> apitest
 app.use("/v1/bikes", bikesRoutes); // All bikes-related routes start with /v1/bikes
 app.use("/v1/payment", paymentsRoutes); // All payment-related routes start with /v1/payment
 
@@ -91,6 +105,22 @@ app.use((req, res, next) => {
   const error = new Error("Not found"); // Create an error with a message
   error.status = 404; // Set status code to 404
   next(error); // Pass the error to the error-handling middleware
+});
+
+app.use((req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1]; // "Bearer <token>"
+    if (!token || token !== 'valid-token') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+});
+
+app.use((req, res, next) => {
+    const apiKey = req.query.api_key || req.headers.api_key;
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+        return res.status(403).json({ error: "Forbidden: Invalid API key" });
+    }
+    next();
 });
 
 // Centralized error-handling middleware
@@ -111,3 +141,5 @@ initializeSocketHandlers(server); // Starta Socket.IO
 server.listen(port, () => {
   console.log(`server is listening on port: ${port}`);
 });
+
+module.exports = app; // Export the Express app to be used in tests

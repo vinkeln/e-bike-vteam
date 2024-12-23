@@ -1,0 +1,21 @@
+/* Exempel på grundläggande styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+h1 {
+    color: #0e0e0f;
+    text-align: center;
+}
+
+button {
+    background-color: #0f0f0f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}

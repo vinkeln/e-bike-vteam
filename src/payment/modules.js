@@ -3,6 +3,7 @@ const config = require("../../config/db/elsparkcykel.json"); // Importerar datab
 
 // Funktion för att hämta alla betalningar
 async function getPayments() {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     let sql = `SELECT * FROM payment;`;
@@ -14,10 +15,25 @@ async function getPayments() {
   } finally {
     if (db) await db.end();
   }
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `SELECT * FROM payment;`;
+        let [result] = await db.query(sql); // Parametriserad fråga utan externa indata
+        return result;
+    } catch (error) {
+        console.error("Error in getPayments:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+>>>>>>> apitest
 }
 
 // Funktion för att hämta resan detaljer med ride id
 async function getPaymentById(paymentId) {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     let sql = `SELECT * FROM payment WHERE payment_id = ?;`;
@@ -29,10 +45,25 @@ async function getPaymentById(paymentId) {
   } finally {
     if (db) await db.end();
   }
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `SELECT * FROM payment WHERE payment_id = ?;`;
+        let [result] = await db.query(sql, [paymentId]); // Parametriserad fråga
+        return result[0];
+    } catch (error) {
+        console.error("Error in getPaymentById:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+>>>>>>> apitest
 }
 
 // Funktion för att skapa en ny betalning
 async function createPayment(userId, amount, paymentType, status) {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     console.log("from async", userId);
@@ -46,19 +77,43 @@ async function createPayment(userId, amount, paymentType, status) {
   } finally {
     if (db) await db.end();
   }
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        console.log("from async",userId)
+        const sql = `INSERT INTO payment (user_id, amount, payment_type, status) VALUES (?, ?, ?, ?)`;
+        const [result] = await db.query(sql, [userId, amount, paymentType, status]); // Parametrized query
+        const paymentId = result.insertId; // Get the inserted payment_id
+        return paymentId;
+    } catch (error) {
+        console.error("Error in createPayment:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+>>>>>>> apitest
 }
 
 // Funktion för att uppdatera betalning
 async function updatePayment(paymentId, amount, status) {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     let sql = `
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `
+>>>>>>> apitest
             UPDATE payment 
             SET 
             amount = ?,
             status = ?
             WHERE payment_id = ?;
         `;
+<<<<<<< HEAD
     await db.query(sql, [amount, status, paymentId]); // Parametriserad fråga
   } catch (error) {
     console.error("Error in updatePayment:", error.message);
@@ -66,10 +121,20 @@ async function updatePayment(paymentId, amount, status) {
   } finally {
     if (db) await db.end();
   }
+=======
+        await db.query(sql, [ amount, status, paymentId]); // Parametriserad fråga
+    } catch (error) {
+        console.error("Error in updatePayment:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+>>>>>>> apitest
 }
 
 // Funktion för att ta bort en betalning
 async function deletePayment(paymentId) {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     let sql = `DELETE FROM payment WHERE payment_id = ?;`;
@@ -80,10 +145,24 @@ async function deletePayment(paymentId) {
   } finally {
     if (db) await db.end();
   }
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `DELETE FROM payment WHERE payment_id = ?;`;
+        await db.query(sql, [paymentId]); // Parametriserad fråga
+    } catch (error) {
+        console.error("Error in deletePayment:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+>>>>>>> apitest
 }
 
 // Funktion för att hämta resan detaljer med ride id
 async function getPaymentsByUserId(userId) {
+<<<<<<< HEAD
   let db = await mysql.createConnection(config);
   try {
     let sql = `SELECT * FROM payment WHERE user_id = ?;`;
@@ -105,3 +184,28 @@ module.exports = {
   deletePayment,
   getPaymentsByUserId,
 };
+=======
+
+    let db = await mysql.createConnection(config);
+    try {
+        let sql = `SELECT * FROM payment WHERE user_id = ?;`;
+        let [result] = await db.query(sql, [userId]); // Parametriserad fråga
+        return result;
+    } catch (error) {
+        console.error("Error in getByuserId:", error.message);
+        throw error;
+    } finally {
+        if (db) await db.end();
+    }
+}
+
+
+module.exports = {
+    getPayments,
+    getPaymentById,
+    createPayment,
+    updatePayment,
+    deletePayment,
+    getPaymentsByUserId
+};
+>>>>>>> apitest
