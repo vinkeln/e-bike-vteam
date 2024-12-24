@@ -14,11 +14,12 @@ const Login = () => {
             const response = await loginUser({ mail: email, password, api_key: apiKey });
             
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem("userId", response.data.userId);
             
-            navigate('/scooters');
+            navigate("/travels");
         } catch (err) {
-            console.error('Login error:', err.response?.data || err.message);
-            setError('Invalid email or password. Please try again.');
+            console.error("Login error:", err.response?.data || err.message);
+            setError("Invalid email or password. Please try again.");
         }
     };
 

@@ -13,14 +13,17 @@ const Register = () => {
     const handleRegister = async () => {
         try {
             const apiKey = 'key123'; 
+            console.log({ name, mail, password, role, api_key: apiKey }); // Logga data som skickas
             const response = await registerUser({ name, mail, password, role, api_key: apiKey });
             console.log('Registration response:', response.data);
             navigate('/login'); 
         } catch (err) {
-            console.error('Registration error:', err.response?.data || err.message);
+            console.error('Registration error:', err.response?.data || err.message); // Logga exakt fel
             setError('Failed to register. Please try again.');
         }
     };
+    
+    
 
     return (
         <div>

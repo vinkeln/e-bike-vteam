@@ -23,6 +23,7 @@ router.get("/users", checkAuth, checkAdmin, async (req, res) => {
 
 // Endpoint för att registrera en ny användare
 router.post("/signup", async (req, res) => {
+  console.log("Incoming request data:", req.body); 
   const { mail, name, password, role } = req.body; // Hämta användardata från förfrågan
 
   try {
@@ -41,6 +42,8 @@ router.post("/signup", async (req, res) => {
       message: "User has been created",
     });
   } catch (error) {
+    console.error("Error during signup:", error.message);
+
     res.status(500).json({
       message: "Server error",
       error: error.message,
@@ -98,11 +101,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> apitest
 // Endpoint för att ta bort en användare
 router.delete("/:userId", checkAuth, async (req, res) => {
   const userId = req.params.userId; // Hämta användarens ID från URL-parametern

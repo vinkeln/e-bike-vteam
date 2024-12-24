@@ -69,15 +69,14 @@ CREATE TABLE `payment` (
 -- Tabell scooter
 CREATE TABLE `scooter` (
   `scooter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bike_serial_number` VARCHAR(50) NOT NULL UNIQUE,
   `current_location_id` int(11) DEFAULT NULL,
   `battery_level` int(11) NOT NULL,
-<<<<<<< HEAD
-  `status` enum('ledig', 'upptagen', 'underhåll'. 'avstänged') DEFAULT 'ledig',
-=======
-  `status` enum('ledig', 'upptagen', 'underhåll', 'avstänged') DEFAULT 'ledig',
->>>>>>> apitest
+  `status` enum('ledig', 'upptagen', 'underhåll', 'avstängd') DEFAULT 'ledig',
   `speed` DECIMAL(5,2) DEFAULT NULL,
   `last_service_date` date DEFAULT NULL,
+  `current_latitude` DOUBLE,
+  `current_longitude` DOUBLE,
   PRIMARY KEY (`scooter_id`),
   KEY `current_location_id` (`current_location_id`),
   CONSTRAINT `scooter_ibfk_1` FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
@@ -103,32 +102,6 @@ CREATE TABLE `ride` (
   KEY `end_location_id` (`end_location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-<<<<<<< HEAD
--- Tabell: city
-CREATE TABLE `city` (
-  `city_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(100) NOT NULL,
-  `country` VARCHAR(100) NOT NULL
-);
-
--- Uppdatera location tabell
-ALTER TABLE `location` ADD COLUMN `city_id` INT;
-
--- Lägg till en foreign key från location till city
-ALTER TABLE `location`
-ADD CONSTRAINT `fk_location_city`
-FOREIGN KEY (`city_id`) REFERENCES `city`(`city_id`)
-ON DELETE SET NULL;
-
-ALTER TABLE `scooter`
-ADD COLUMN `current_latitude` DOUBLE,
-ADD COLUMN `current_longitude` DOUBLE;
-
-ALTER TABLE `scooter`
-ADD COLUMN `bike_serial_number` VARCHAR(50) NOT NULL UNIQUE AFTER `scooter_id`;
-
-=======
->>>>>>> apitest
 --Tabell: warnings // NY TABELL
 CREATE TABLE `warnings` (
   `warning_id` INT NOT NULL AUTO_INCREMENT,
@@ -140,8 +113,4 @@ CREATE TABLE `warnings` (
   PRIMARY KEY (`warning_id`),
   FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`scooter_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
->>>>>>> apitest

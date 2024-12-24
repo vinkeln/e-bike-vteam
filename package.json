@@ -12,7 +12,7 @@
   "dependencies": {
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
     "http": "^0.0.1-security",
@@ -23,21 +23,17 @@
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.7",
     "promise-mysql": "^5.2.0",
-<<<<<<< HEAD
     "serialport": "^12.0.0",
     "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
-=======
+    "socket.io-client": "^4.8.1",
     "supertest": "^7.0.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "sinon": "^19.0.2"
-=======
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
     "chai": "^4.3.6",
     "chai-http": "^4.4.0",
-    "mocha": "^11.0.1"
->>>>>>> 85455d5169b65ee872144f045dea4a51c24c4570
->>>>>>> apitest
+    "mocha": "^11.0.1",
+    "sinon": "^19.0.2"
   }
 }
