@@ -157,20 +157,27 @@ router.put("/update/user", checkAuth, async (req, res) => {
   try {
     // Kontrollera om användaren existerar
     const existingUser = await userModules.getUserid(userId);
-
+    console.log(existingUser, "jghfddsdfgh");
     if (existingUser.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
+    if (existingUser[0].email === email) {
+      // Uppdatera användarens namn och e-post
+      await userModules.updateUser(userId, name, email);
 
+      return res
+        .status(200)
+        .json({ message: "information has been updated successfully" });
+    }
     // Kontrollera om den nya e-posten redan används
     const existingEmail = await userModules.getUserEmails(email);
     if (existingEmail.length > 0) {
       return res.status(409).json({ message: "Mail exists" });
     }
-    // Uppdatera användarens namn och e-post
+
     await userModules.updateUser(userId, name, email);
 
-    res
+    return res
       .status(200)
       .json({ message: "information has been updated successfully" });
   } catch (error) {

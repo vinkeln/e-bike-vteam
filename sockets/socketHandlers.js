@@ -108,6 +108,7 @@ function initializeSocketHandlers(server) {
         if (result.affectedRows === 0) {
           socket.emit("updateError", { message: "Bike not found" });
         } else {
+          io.emit("bikeNotification", data); //
           socket.emit("updateSuccess", { message: "Bike status updated" });
         }
       } catch (error) {

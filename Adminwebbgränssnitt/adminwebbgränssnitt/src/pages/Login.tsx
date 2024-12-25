@@ -26,7 +26,7 @@ const Login = () => {
   };
   return (
     <>
-      {checkLogin && <Alert message="Auth faild" />}
+      {checkLogin && <Alert color="alert-danger" message="Auth faild" />}
       <LoginForm onSubmit={handleFormSubmit} />
     </>
   );

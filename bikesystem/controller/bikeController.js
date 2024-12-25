@@ -6,7 +6,7 @@ let isDisabled = false;
 // Connect to the WebSocket server
 const socket = io("http://localhost:3000");
 const travelLogs = [];
-const bikeSerialNumber = "12345";
+const bikeSerialNumber = "12344";
 let currentLongitude = 18.0632;
 let currentLatitude = 59.3345;
 let batteryLevel = 100;
@@ -89,7 +89,7 @@ function simulateBatteryConsumption() {
     batteryLevel -= reductionPerSecond * 5; // Minska med 5 sekunders förbrukning
     batteryLevel = Math.max(0, batteryLevel); // Förhindra att batterinivån går under 0
 
-    console.log(`Batterinivå: ${batteryLevel.toFixed(2)}%`);
+    // console.log(`Batterinivå: ${batteryLevel.toFixed(2)}%`);
 
     // Kontrollera om batterinivån är låg
     if (batteryLevel < 20) {

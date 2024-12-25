@@ -1,6 +1,5 @@
 import citiesModules from "../../modules/citises.ts";
 import React, { useEffect, useState } from "react";
-
 interface City {
   city_id?: number;
   name: string;
@@ -16,7 +15,6 @@ const CitiesForm: React.FC = () => {
     const fetchCities = async () => {
       try {
         const result = await citiesModules.getcities();
-
         if (result.status === "success") {
           setCityList(result.cities);
         } else {
