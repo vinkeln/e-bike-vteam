@@ -1,5 +1,5 @@
 // chargingstations.ts
-import { apiKey, BASE_URL } from "../utils.ts"; // Antag att BASE_URL och apiKey exporteras från utils.ts
+import { apiKey, baseURL } from "../utils.ts"; // Antag att BASE_URL och apiKey exporteras från utils.ts
 import auth from "./auths.ts";
 
 interface ChargingStation {
