@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import auth from "../../modules/auths.ts";
-import { MapMarkers, Bike, ChargingStation, ParkingZone } from '../components/MapMarkers.tsx'; // Säkerställ att sökvägarna är korrekta
+import parkings from '../../modules/parkings.ts';
+import chargingStations from '../../modules/chargingStations.ts';
+import { MapMarkers, Bike, ChargingStation, ParkingZone } from '../components/MapMarkers.tsx';
 
 const ChargingStationsMap = () => {
     const [stations, setStations] = useState<ChargingStation[]>([
@@ -12,12 +14,12 @@ const ChargingStationsMap = () => {
             longitude: 18.0666, 
             total_ports: 10, 
             available_ports: 5 
-        } // Coded chargingStation object on to the map.
+        }
     ]);
     const [bikes, setBikes] = useState<Bike[]>([
         { id: 1, latitude: 59.3294, longitude: 18.0687, status: 'Ledig' },
         { id: 2, latitude: 59.3396, longitude: 18.0690, status: 'Upptagen' }
-    ]); // Coded bike object on to the map.
+    ]);
     const [parkingZones, setParkingZones] = useState<ParkingZone[]>([
         {
             zone_id: 4,
@@ -34,45 +36,32 @@ const ChargingStationsMap = () => {
         fetchParkingZones();
     }, []);
 
-    const fetchStations = () => {
-        fetch('http://localhost:3000/v1/chargingstations', {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${auth.token}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.chargingStations && data.chargingStations.length > 0) {
-                setStations(data.chargingStations); // Data from the API
+    const fetchStations = async () => {
+        try {
+            const response = await chargingStations.fetchStations(); // Use fetchStations from chargingStations module
+            if (response.chargingStations && response.chargingStations.length > 0) {
+                setStations(response.chargingStations); // Update state with stations from API
             } else {
-                console.error("Inga stationer hittades");
+                console.error("No stations found");
             }
-        })
-        .catch(err => {
-            console.error("Misslyckades med att hämta laddningsstationer:", err);
+        } catch (error) {
+            console.error("Failed to fetch stations:", error);
             setStations([]);
-        });
+        }
     };
-    const fetchParkingZones = () => {
-        fetch('http://localhost:3000/v1/parkingzones', {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${auth.token}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.parkingZones && data.parkingZones.length > 0) {
-                setParkingZones(data.parkingZones);
+
+    const fetchParkingZones = async () => {
+        try {
+            const response = await parkings.getparkings(); // Use getparkings from parkings module
+            if (response.parkings_zones && response.parkings_zones.length > 0) {
+                setParkingZones(response.parkings_zones);
             } else {
-                console.error("Inga parkeringszoner hittades");
+                console.error("No parking zones found");
             }
-        })
-        .catch(err => {
-            console.error("Misslyckades med att hämta parkeringszoner:", err);
+        } catch (error) {
+            console.error("Failed to fetch parking zones:", error);
             setParkingZones([]);
-        });
+        }
     };
 
     return (
