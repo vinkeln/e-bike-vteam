@@ -1,7 +1,7 @@
 import auth from "./auths.ts";
 import { apiKey } from "../utils.ts";
 
-const BASE_URL = "http://localhost:3000/v1/chargingstations";
+const baseURL = "http://localhost:3000/v1/chargingstations";
 
 interface ChargingStation {
   location_id?: string;
@@ -20,7 +20,7 @@ interface ChargingStation {
 
 export const fetchStations = async () => {
   try {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(baseURL, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.token}`,
@@ -50,7 +50,7 @@ export const addStation = async (
   };
 
   try {
-    const response = await fetch(`${BASE_URL}/add`, {
+    const response = await fetch(`${baseURL}/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

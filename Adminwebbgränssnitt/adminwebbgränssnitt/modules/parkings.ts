@@ -34,7 +34,7 @@ const parkings = {
             }
 
             const result = await response.json();
-            return result.parkings_zones
+            return result;
         } catch (error) {
             console.error("Error fetching parkings:", error);
             throw error;

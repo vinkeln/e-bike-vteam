@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { addStation } from "../../modules/chargingStations.tsx";
+import chargingStations from "../../modules/chargingStations.ts";
 import { useNavigate } from "react-router-dom";
 import authModules from "../../modules/auths.ts";
 
@@ -16,7 +16,7 @@ const AddChargingStation = () => {
     cityId: "",
     latitude: "",
     longitude: "",
-    totalPorts: "",
+    totalPorts: ""
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [message, setMessage] = useState("");
@@ -26,11 +26,10 @@ const AddChargingStation = () => {
     if (!formValues.cityId) newErrors.cityId = "City ID is required";
     if (!formValues.latitude) newErrors.latitude = "Latitude is required";
     if (!formValues.longitude) newErrors.longitude = "Longitude is required";
-    if (!formValues.totalPorts)
-      newErrors.totalPorts = "Total ports is required";
-
+    if (!formValues.totalPorts) newErrors.totalPorts = "Total ports is required";
     return newErrors;
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -38,30 +37,32 @@ const AddChargingStation = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form", formValues);
     const formErrors = validateForm();
+    console.log("Form Errors", formErrors);
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
     setErrors({});
     try {
-      const result = await addStation(
+      const result = await chargingStations.addStation(
         formValues.cityId,
         formValues.latitude,
         formValues.longitude,
         formValues.totalPorts
       );
       if (result === "ok") {
-        setMessage("Parking added successfully!");
+        setMessage("Station added successfully!");
         navigate("/");
       } else {
         setMessage(result);
       }
     } catch (error) {
-      setMessage("Failed to add parking. Please try again.");
-      console.error("Error adding parking:", error);
+      console.error("Error adding station:", error);
+      setMessage("Failed to add station. Please try again. Error: " + error.message);
     }
   };
 

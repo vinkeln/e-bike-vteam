@@ -1,5 +1,5 @@
 // chargingstations.ts
-import { apiKey, baseURL } from "../utils.ts"; // Antag att BASE_URL och apiKey exporteras från utils.ts
+import { apiKey, baseURL } from "../utils.ts"; // Antag att baseURL och apiKey exporteras från utils.ts
 import auth from "./auths.ts";
 
 interface ChargingStation {
@@ -29,6 +29,12 @@ const chargingStations = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      const chargingStations = data.chargingStations.map(station => ({
+        ...station,
+        latitude: parseFloat(station.latitude),
+        longitude: parseFloat(station.longitude)
+      }));
+      console.log("Parsed Stations:", chargingStations);
       return { status: "success", chargingStations: data.chargingStations || [] };
     } catch (error) {
       console.error("Failed to fetch charging stations:", error);
@@ -42,10 +48,11 @@ const chargingStations = {
       longitude,
       city_id: cityId,
       total_ports: totalPorts,
+      api_key: apiKey,
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/v1/chargingstations/add`, {
+      const response = await fetch(`${baseURL}/v1/chargingstations/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,6 +63,7 @@ const chargingStations = {
 
       if (!response.ok) {
         console.error(`Server responded with status ${response.status}`);
+        console.log(auth.token); 
         return "Server error. Please try again later.";
       }
 

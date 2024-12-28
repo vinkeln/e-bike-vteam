@@ -5,17 +5,17 @@ import auth from "../../modules/auths.ts";
 import parkings from '../../modules/parkings.ts';
 import chargingStations from '../../modules/chargingStations.ts';
 import { MapMarkers, Bike, ChargingStation, ParkingZone } from '../components/MapMarkers.tsx';
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3000");
+
 
 const ChargingStationsMap = () => {
     const [stations, setStations] = useState<ChargingStation[]>([
-        { 
-            station_id: 3, 
-            latitude: 59.3273, 
-            longitude: 18.0666, 
-            total_ports: 10, 
-            available_ports: 5 
-        }
+        { station_id: 3, latitude: 59.3273, longitude: 18.0666, total_ports: 10, available_ports: 5 },
+        { station_id: 4, latitude: 59.3273, longitude: 59.3073, total_ports: 10, available_ports: 10 } // Hårdkodad station
     ]);
+
     const [bikes, setBikes] = useState<Bike[]>([
         { id: 1, latitude: 59.3294, longitude: 18.0687, status: 'Ledig' },
         { id: 2, latitude: 59.3396, longitude: 18.0690, status: 'Upptagen' }
@@ -34,11 +34,28 @@ const ChargingStationsMap = () => {
     useEffect(() => {
         fetchStations();
         fetchParkingZones();
+        socket.on("bikeNotification", (bike) => {
+            console.log("Received bike data:", bike);
+            setBikes(prevBikes => {
+                const existingBikeIndex = prevBikes.findIndex(b => b.id === bike.id);
+                if (existingBikeIndex >= 0) {
+                    const newBikes = [...prevBikes];
+                    newBikes[existingBikeIndex] = { ...bike, batteryLevel: bike.batteryLevel, speed: bike.speed };
+                    return newBikes;
+                } else {
+                    return [...prevBikes, bike];
+                }
+            });
+        });
+        return () => {
+            socket.off("bikeNotification");
+        };
     }, []);
 
     const fetchStations = async () => {
         try {
             const response = await chargingStations.fetchStations(); // Use fetchStations from chargingStations module
+            console.log("Fetched Stations:", response);
             if (response.chargingStations && response.chargingStations.length > 0) {
                 setStations(response.chargingStations); // Update state with stations from API
             } else {
