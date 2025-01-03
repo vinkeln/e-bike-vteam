@@ -123,11 +123,12 @@ async function deleteRide(rideId) {
 async function getByUserId(userId) {
   let db = await mysql.createConnection(config);
   try {
-    let sql = `SELECT * FROM ride WHERE user_id = ?;`;
-    let [result] = await db.query(sql, [userId]); // Parametriserad fråga
-    return result;
-  } catch (error) {
-    console.error("Error in getByuserId:", error.message);
+    const sql = 'SELECT * FROM ride WHERE user_id = ?;';
+    const [rows] = await db.query(sql, [userId]);
+    console.log("Rides fetched from database:", rows);
+    return rows;
+} catch (error) {
+    console.error("Database query error:", error.message);
     throw error;
   } finally {
     if (db) await db.end();

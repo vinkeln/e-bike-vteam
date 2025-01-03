@@ -1,5 +1,7 @@
 "use strict";
 require('dotenv').config();
+const cors = require("cors"); // Importera CORS-paketet
+
 console.log("Loaded API_KEY:", process.env.API_KEY);
 const express = require("express");
 const app = express();
@@ -26,6 +28,13 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Middleware to set up CORS (Cross-Origin Resource Sharing) headers
+app.use(cors({
+    origin: 'http://localhost:3002', // Allow requests from the frontend
+    methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
+    allowedHeaders: 'Authorization,Content-Type', // Allowed headers
+  }));
+  
 // Middleware to set up CORS (Cross-Origin Resource Sharing) headers
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // Allow all origins
@@ -54,24 +63,27 @@ app.use(limiter); // Apply rate limiting globally
 
 // Middleware to handle API key authentication
 app.use((req, res, next) => {
-    let apiKey; // Variable to store the API key
+    let apiKey; // Variabel för API-nyckel
 
-    // Extract API key from the query string for GET requests
+    // Extrahera API-nyckeln beroende på metod
     if (req.method === 'GET') {
         apiKey = req.query['api_key'];
-    } 
-    // Extract API key from the request body for other methods (POST, PUT, DELETE)
-    else if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
+    } else if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
         apiKey = req.body['api_key'];
     }
 
-    // Validate the API key
+    // Logga API-nyckel och Authorization-header för felsökning
+    console.log('API Key received:', apiKey);
+    console.log('Authorization Header:', req.headers.authorization);
+
+    // Validera API-nyckeln
     if (!apiKey || apiKey !== process.env.API_KEY) {
-        return res.status(403).json({ error: "Forbidden: Invalid API key" }); // Return an error if invalid
+        return res.status(403).json({ error: "Forbidden: Invalid API key" });
     }
 
-    next(); // API key is valid, move to the next middleware
+    next(); // Fortsätt till nästa middleware om API-nyckeln är korrekt
 });
+
 
 // Mount versioned routes for cities, parking, and user-related endpoints
 app.use("/v1/cities", citiesRoutes); // All city-related routes start with /v1/cities

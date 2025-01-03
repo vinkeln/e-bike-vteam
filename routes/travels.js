@@ -142,29 +142,26 @@ router.get("/:rideId", checkAuth, async (req, res) => {
 });
 
 // Get details about a specific travel.
-router.get("/user/:userId", checkAuth, async (req, res) => {
-  let { userId } = req.params;
-
-  // Validate that the userId is a number.
-  if (isNaN(userId)) {
-    return res.status(400).json({ error: "Invalid ride ID" });
-  }
-
+router.get('/user/:userId', checkAuth, async (req, res) => {
   try {
-    const ride = await travelsModules.getByUserId(userId);
+      const userId = parseInt(req.params.userId, 10);
+      if (req.userData.userId !== userId) {
+          return res.status(401).json({ message: 'Unauthorized: User ID mismatch' });
+      }
 
-    if (ride.length === 0) {
-      return res.status(404).json({ error: "Travel not found" });
-      // If the travel is not found, return a error message.
-    }
-    res.status(200).json({
-      Status: "Success",
-      Ride: ride,
-    });
+      console.log("Fetching rides for user:", userId);
+      const travels = await db.getByUserId(userId);
+      if (!travels || travels.length === 0) {
+          return res.status(404).json({ message: 'No travels found for the user' });
+      }
+
+      res.status(200).json({ rides: travels });
   } catch (error) {
-    res.status(500).json({ error: "Server Error", details: error.message });
+      console.error("Error fetching travels:", error.message);
+      res.status(500).json({ message: 'Server error fetching travels' });
   }
 });
+
 
 // Endpoint för att ta bort en användare
 router.delete("/:rideId", checkAuth, checkAdmin, async (req, res) => {

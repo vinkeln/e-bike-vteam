@@ -1,42 +1,65 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const PreviousTravels = ({ userId }) => {
-    const [travels, setTravels] = useState([]);
-    const [error, setError] = useState("");
+const PreviousTravels = () => {
+    const [rides, setRides] = useState([]);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchTravels = async () => {
+        const fetchRides = async () => {
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
+
+            if (!userId || !token) {
+                setError('User ID or token is missing. Please log in again.');
+                return;
+            }
+
             try {
-                const token = localStorage.getItem("token"); // Hämta token från localStorage
-                const response = await axios.get(`http://localhost:3000/v1/travels/user/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                console.log("Fetching rides with:", {
+                    url: `http://localhost:3000/v1/travels/user/${userId}`,
+                    headers: { Authorization: `Bearer ${token}` },
                 });
-                setTravels(response.data.rides);
+
+                const response = await axios.get(
+                    `http://localhost:3000/v1/travels/user/${userId}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                console.log("Rides fetched:", response.data.rides);
+                setRides(response.data.rides);
             } catch (err) {
-                setError("Failed to fetch travels.");
-                console.error(err);
+                console.error("Error fetching rides:", err.response?.data || err.message);
+                setError("Failed to fetch rides. Please try again later.");
+            } finally {
+                setIsLoading(false);
             }
         };
 
-        fetchTravels();
-    }, [userId]);
+        fetchRides();
+    }, []);
 
     return (
         <div>
-            <h2>Your Previous Travels</h2>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <ul>
-                {travels.map((travel) => (
-                    <li key={travel.ride_id}>
-                        Start: {travel.start_time} - End: {travel.end_time || "Ongoing"}
-                        <br />
-                        Cost: {travel.cost} SEK
-                    </li>
-                ))}
-            </ul>
+            <h2>Previous Rides</h2>
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p style={{ color: 'red' }}>{error}</p>
+            ) : rides.length === 0 ? (
+                <p>No rides found.</p>
+            ) : (
+                <ul>
+                    {rides.map((ride) => (
+                        <li key={ride.ride_id}>
+                            Ride ID: {ride.ride_id}, Cost: {ride.cost} SEK
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

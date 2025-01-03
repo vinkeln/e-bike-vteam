@@ -10,18 +10,24 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const apiKey = 'key123';
+            const apiKey = "key123";
             const response = await loginUser({ mail: email, password, api_key: apiKey });
-            
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem("userId", response.data.userId);
-            
+            console.log("API Response:", response.data);
+    
+            if (!response.data.user_id) {
+                throw new Error("Invalid API response: Missing user ID");
+            }
+    
+            localStorage.setItem("userId", response.data.user_id);
             navigate("/travels");
         } catch (err) {
             console.error("Login error:", err.response?.data || err.message);
             setError("Invalid email or password. Please try again.");
         }
     };
+    
+    
+    
 
     return (
         <div>
