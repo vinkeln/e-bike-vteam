@@ -30,10 +30,10 @@ app.use(express.json());
 
 // Middleware to set up CORS (Cross-Origin Resource Sharing) headers
 app.use(cors({
-    origin: 'http://localhost:3002', // Allow requests from the frontend
-    methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
-    allowedHeaders: 'Authorization,Content-Type', // Allowed headers
-  }));
+    origin: ['http://localhost:3001', 'http://localhost:3002'],
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Authorization,Content-Type',
+}));
   
 // Middleware to set up CORS (Cross-Origin Resource Sharing) headers
 app.use((req, res, next) => {

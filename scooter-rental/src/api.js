@@ -12,6 +12,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (data) => {
     try {
         const response = await axios.post("http://localhost:3000/v1/user/login", data);
+        console.log("test", response);
         return response; // Returnera hela svaret
     } catch (err) {
         console.error("API error:", err.response?.data || err.message);

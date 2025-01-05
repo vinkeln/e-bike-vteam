@@ -17,22 +17,23 @@ const PreviousTravels = () => {
             }
 
             try {
+                console.log(token, "kkk");
                 console.log("Fetching rides with:", {
                     url: `http://localhost:3000/v1/travels/user/${userId}`,
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
                 const response = await axios.get(
-                    `http://localhost:3000/v1/travels/user/${userId}`,
+                    `http://localhost:3000/v1/travels/user/${userId}?api_key=key123`,
                     {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
+                        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+                    } 
                 );
 
-                console.log("Rides fetched:", response.data.rides);
-                setRides(response.data.rides);
+                console.log("Rides fetched:", response.data.Ride);
+                console.log(response, "testt")
+                setRides(response.data.Ride);
             } catch (err) {
-                console.error("Error fetching rides:", err.response?.data || err.message);
                 setError("Failed to fetch rides. Please try again later.");
             } finally {
                 setIsLoading(false);
