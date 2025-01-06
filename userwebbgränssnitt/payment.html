@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="sv>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    </head>
+    <body>
+    <h1>Payment</h1>
+
+    <h2>Prepaid</h2>
+    <form id="prepaid-form">
+        <label for="prepaid-amount">Amount:</label>
+        <input type="number" id="prepaid-amount" name="amount" required>
+        <button type="submit">Add Funds</button>
+    </form>
+
+    <h2>Subscription</h2>
+    <form id="subscription-form">
+        <label for="subscription-amount">Monthly Amount:</label>
+        <input type="number" id="subscription-amount" name="amount" required>
+        <button type="submit">Subscribe</button>
+    </form>
+
+    <script src="payment.js"></script>
+    </body>
+    </html>
