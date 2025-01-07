@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api';
+import axios from 'axios';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -12,23 +12,22 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-            const apiKey = 'key123';
-            console.log({ name, mail, password, role, api_key: apiKey });
-            const response = await registerUser({
-                name,
-                mail,
-                password,
-                role,
+            const apiKey = "key123"; // API-nyckel
+            const response = await axios.post("http://localhost:3000/v1/user/signup", {
+                name: name,
+                mail: mail,
+                password: password,
+                role: role,
                 api_key: apiKey,
             });
-            navigate('/login');
+
+            console.log("Registration successful:", response.data);
+            navigate("/login");
         } catch (err) {
-            console.error('Registration error:', err.response?.data || err.message);
-            setError(err.response?.data?.message || 'Failed to register. Please try again.');
+            console.error("Registration error:", err.response?.data || err.message);
+            setError(err.response?.data?.message || "Failed to register. Please try again.");
         }
     };
-    
-    
 
     return (
         <div>

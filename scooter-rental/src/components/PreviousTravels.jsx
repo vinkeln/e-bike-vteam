@@ -17,12 +17,6 @@ const PreviousTravels = () => {
             }
 
             try {
-                console.log(token, "kkk");
-                console.log("Fetching rides with:", {
-                    url: `http://localhost:3000/v1/travels/user/${userId}`,
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-
                 const response = await axios.get(
                     `http://localhost:3000/v1/travels/user/${userId}?api_key=key123`,
                     {
@@ -31,7 +25,7 @@ const PreviousTravels = () => {
                 );
 
                 console.log("Rides fetched:", response.data.Ride);
-                console.log(response, "testt")
+                // console.log(response, "testt")
                 setRides(response.data.Ride);
             } catch (err) {
                 setError("Failed to fetch rides. Please try again later.");
