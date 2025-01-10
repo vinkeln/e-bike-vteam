@@ -7,6 +7,7 @@ import PreviousTravels from './components/PreviousTravels';
 import Payment from './components/Payment';
 import UserProfile from './components/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
+import Info from './components/Info';
 
 function App() {
     return (
@@ -15,30 +16,10 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
-                            <UserProfile />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/travels"
-                    element={
-                        <ProtectedRoute>
-                            <PreviousTravels />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/payment"
-                    element={
-                        <ProtectedRoute>
-                            <Payment />
-                        </ProtectedRoute>
-                    }
-                />
+                <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                <Route path="/travels" element={<ProtectedRoute><PreviousTravels /></ProtectedRoute>} />
+                <Route path="/payment" element={ <ProtectedRoute><Payment /></ProtectedRoute>} />
+                <Route path="/info" element={ <ProtectedRoute><Info /></ProtectedRoute>} />
             </Routes>
         </Router>
     );

@@ -1,76 +1,71 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
-  const [amount, setAmount] = useState('');
-  const [paymentType, setPaymentType] = useState('prepaid');
-  const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [amount, setAmount] = useState('');
+    const [method, setMethod] = useState('prepaid');
+    const navigate = useNavigate();
 
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
+    const handlePayment = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const user_id = localStorage.getItem('userId');
 
-  const handlePayment = async () => {
-    const data = {
-      amount: amount,
-      paymentType: paymentType,
+            const data = {
+                user_id,
+                // method,
+                amount,
+                api_key: 'key123',
+            };
+            console.log(data);
+
+            const response = await axios.put('http://localhost:3000/v1/user/update/balance', data, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+            });
+
+            setMessage('Payment successful');
+        } catch (err) {
+          console.log(err);
+        }
     };
 
-    if (!userId || !token) {
-      setMessage('User ID or token is missing. Please log in again.');
-      return;
-    }
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/api/payment/${userId}?api_key=key123`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      setMessage('Payment successful!');
-    } catch (error) {
-      console.log(`Payment failed: ${error.response?.data?.message || 'Unknown error'}`);
-    }
-  };
+    return (
+        <div>
+            <button onClick={() => navigate('/profile')}>Back to Profile</button>
 
-  return (
-    <div>
-      <h1>Payment</h1>
-      <div>
-        <label>
-          <input
-            type="radio"
-            value="prepaid"
-            checked={paymentType === 'prepaid'}
-            onChange={() => setPaymentType('prepaid')}
-          />
-          Prepaid (Top-up balance)
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="subscription"
-            checked={paymentType === 'subscription'}
-            onChange={() => setPaymentType('subscription')}
-          />
-          Monthly Subscription
-        </label>
-      </div>
-      <div>
-        <label>Amount:</label>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-      </div>
-      <button onClick={handlePayment}>Submit</button>
-      <p>{message}</p>
-    </div>
-  );
+            <h1>Payment</h1>
+            <div>
+                <label>
+                    <input
+                        type="radio"
+                        value="prepaid"
+                        checked={method === 'prepaid'}
+                        onChange={() => setMethod('prepaid')}
+                    />
+                    Prepaid
+                </label>
+            </div>
+            <div>
+                <label>
+                    Amount:
+                    <input
+                        type="text" placeholder="Enter a number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                    />
+                </label>
+            </div>
+            <button onClick={handlePayment}>Submit</button>
+            {message && <p>Success: {message}</p>}
+            {error && <p style={{ color: 'red' }}>Payment failed: {error}</p>}
+        </div>
+    );
 };
 
 export default Payment;

@@ -10,6 +10,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
+            const token = localStorage.getItem('token');
             const apiKey = "key123"; // API-nyckel
             const response = await axios.post("http://localhost:3000/v1/user/login", {
                 mail: email,

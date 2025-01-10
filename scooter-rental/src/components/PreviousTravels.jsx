@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const PreviousTravels = () => {
     const [rides, setRides] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchRides = async () => {
@@ -39,6 +43,8 @@ const PreviousTravels = () => {
 
     return (
         <div>
+            <button onClick={() => navigate('/profile')}>Back to Profile</button>
+
             <h2>Previous Rides</h2>
             {isLoading ? (
                 <p>Loading...</p>

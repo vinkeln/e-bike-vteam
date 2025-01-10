@@ -19,6 +19,7 @@ const Register = () => {
                 password: password,
                 role: role,
                 api_key: apiKey,
+                
             });
 
             console.log("Registration successful:", response.data);
