@@ -86,3 +86,45 @@ button .icon {
 .info-list li {
     margin-bottom: 10px;
 }
+/* Styling for About page */
+.about-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.about-container h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.about-container p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.about-container h2 {
+    font-size: 2rem;
+    color: #28a745; /* Grön färg */
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.about-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.about-container ul li {
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 10px;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Importera FontAwesomeIcon
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'; // Importera info-ikonen
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const Info = () => {
@@ -8,7 +8,7 @@ const Info = () => {
     
     return (
         <div className="info-container">
-                        <button onClick={() => navigate('/profile')}>Back to Profile</button>
+            <button onClick={() => navigate('/profile')}>Back to Profile</button>
 
             <h1 className="info-header">
                 <FontAwesomeIcon icon={faInfoCircle} className="info-icon" />
