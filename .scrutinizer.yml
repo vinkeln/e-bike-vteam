@@ -1,0 +1,34 @@
+tools:
+    eslint:
+        config:
+            extends: "react-app" # Använd ESLint-konfigurationen som skapades av Create React App
+    sql_lint:
+        enabled: true
+    sql_query_analyzer:
+        enabled: true
+
+build:
+    environment:
+        node:
+            version: "16"  # Eller versionen av Node.js som ditt projekt använder
+
+filter:
+    paths:
+        - "src/*"  # Ange vilka filer eller mappar som ska analyseras (React-kod finns i 'src/' eller scooter-rental)
+        - "backend/*"  # Om du har backend-kod i en separat mapp
+
+checks:
+    javascript: # Ange vilka ESLint-regler som ska användas
+        code_rating: true
+        unused_variables: true
+        no_console: true
+        complexity: true  # Kontrollera komplexitet i din kod
+    sql:
+        sql_injection: true  # Analysera kod för potentiella SQL-injection risker
+        unused_queries: true  # Identifiera oanvända SQL-frågor
+
+# Lägg till testkonfigurationer om du använder tester
+tests:
+    override:
+        - "npm install"
+        - "npm test"
