@@ -23,12 +23,9 @@
     "supertest": "^7.0.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "sinon": "^19.0.2"
-=======
+    "sinon": "^19.0.2",
     "chai": "^4.3.6",
     "chai-http": "^4.4.0",
     "mocha": "^11.0.1"
->>>>>>> 85455d5169b65ee872144f045dea4a51c24c4570
   }
 }
