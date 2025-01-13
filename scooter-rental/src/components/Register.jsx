@@ -11,6 +11,7 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+        
         try {
             const apiKey = "key123"; // API-nyckel
             const response = await axios.post("http://localhost:3000/v1/user/signup", {
@@ -32,6 +33,8 @@ const Register = () => {
 
     return (
         <div>
+            <button onClick={() => navigate('/')}>Back to Homepage</button>
+
             <h2>Create an Account</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <input
@@ -53,6 +56,7 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <button onClick={handleRegister}>Register</button>
+            <p>Already have an account? <a href="/login">Login here</a></p>
         </div>
     );
 };

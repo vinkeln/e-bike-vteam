@@ -28,6 +28,8 @@ const Payment = () => {
                   'Content-Type': 'application/json',
                 },
             });
+            console.log('Backend response:', response.data);
+
 
             setMessage('Payment successful');
         } catch (err) {

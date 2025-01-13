@@ -22,6 +22,7 @@ const Login = () => {
                 throw new Error("Invalid API response: Missing user ID");
             }
 
+            console.log("userId", response.data.user_id);
             localStorage.setItem("userId", response.data.user_id);
             localStorage.setItem("token", response.data.token);
             console.log("Login successful. Token:", response.data.token);
@@ -34,6 +35,8 @@ const Login = () => {
 
     return (
         <div>
+            <button onClick={() => navigate('/')}>Back to Homepage</button>
+
             <h2>Login</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <input
@@ -49,6 +52,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <button onClick={handleLogin}>Login</button>
+            <p>Don't have an account? <a href="/register">Register here</a></p>
         </div>
     );
 };
