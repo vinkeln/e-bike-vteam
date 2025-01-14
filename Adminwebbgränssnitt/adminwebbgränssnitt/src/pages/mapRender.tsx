@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import React, { useEffect, useState, useRef } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import auth from "../../modules/auths.ts";
 import parkings from '../../modules/parkings.ts';
@@ -9,8 +9,14 @@ import { io } from "socket.io-client";
 
 const socket = io("http://localhost:3000");
 
+const cities = {
+    Stockholm: { lat: 59.3293, lng: 18.0686 },
+    Göteborg: { lat: 57.7089, lng: 11.9746 },
+    Malmö: { lat: 55.6050, lng: 13.0038 }
+};
 
 const ChargingStationsMap = () => {
+    const [currentCity, setCurrentCity] = useState('Stockholm');
     const [stations, setStations] = useState<ChargingStation[]>([
         { station_id: 3, latitude: 59.3273, longitude: 18.0666, total_ports: 10, available_ports: 5 },
         { station_id: 4, latitude: 59.3273, longitude: 59.3073, total_ports: 10, available_ports: 10 } // Hårdkodad station
@@ -81,14 +87,32 @@ const ChargingStationsMap = () => {
         }
     };
 
+    const handleCityChange = (event) => {
+        setCurrentCity(event.target.value);
+    };
+
+    function SetCenter({ city }) {
+        const map = useMap();
+        map.setView(cities[city], map.getZoom());
+        return null;
+    }
+
     return (
         <>
-            <MapContainer center={defaultCenter} zoom={13} style={{ height: '80vh', width: '80%' }}>
+            <div style={{ padding: '10px' }}>
+                <select value={currentCity} onChange={handleCityChange}>
+                    <option value="Stockholm">Stockholm</option>
+                    <option value="Göteborg">Göteborg</option>
+                    <option value="Malmö">Malmö</option>
+                </select>
+            </div>
+            <MapContainer center={cities[currentCity]} zoom={13} style={{ height: '80vh', width: '80%' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 <MapMarkers bikes={bikes} chargingStations={stations} parkingZones={parkingZones} />
+                <SetCenter city={currentCity} />
             </MapContainer>
         </>
     );
