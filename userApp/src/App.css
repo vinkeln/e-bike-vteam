@@ -1,0 +1,30 @@
+.navbar {
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  padding: 0.5rem 1rem;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s;
+}
+
+.navbar a:hover, .navbar a:focus {
+  color: #ff0;
+}
