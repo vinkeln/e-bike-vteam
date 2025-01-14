@@ -37,15 +37,16 @@ describe("Payment API", () => {
     it("GET /v1/payment should return all payments", async () => {
         const res = await request(server)
             .get("/v1/payment")
-            .set("Authorization", jwtToken) 
+            .set("Authorization", `Bearer ${jwtToken}`) //jwtToken skickas ut korrekt i Authorization header
             .query({ api_key: apiKey });
         expect(res.status).to.equal(200);
         expect(res.body).to.have.property("payments");
     });
 
     it("POST /v1/payment should create a new payment", async () => {
-        const res = await request(app)
+        const res = await request(server)
             .post("/v1/payment")
+            .set("Authorization", `Bearer ${jwtToken}`) //jwtToken skickas ut korrekt i Authorization header
             .send({
                 api_key: apiKey,
                 user_id: 1,
@@ -58,8 +59,9 @@ describe("Payment API", () => {
     });
 
     it("PUT /v1/payment/:paymentId should update a payment", async () => {
-        const res = await request(app)
+        const res = await request(server) 
             .put("/v1/payment/1")
+            .set("Authorization", `Bearer ${jwtToken}`) //Token
             .send({
                 api_key: apiKey,
                 amount: 150,
@@ -70,16 +72,18 @@ describe("Payment API", () => {
     });
 
     it("DELETE /v1/payment/:paymentId should delete a payment", async () => {
-        const res = await request(app)
+        const res = await request(server)
             .delete("/v1/payment/1")
+            .set("Authorization", `Bearer ${jwtToken}`) //Token
             .query({ api_key: apiKey });
         expect(res.status).to.equal(200);
         expect(res.body).to.have.property("message", "Payment deleted successfully");
     });
 
     it("GET /v1/payment/user/:userId should return all payments for a user", async () => {
-        const res = await request(app)
+        const res = await request(server)
             .get("/v1/payment/user/1")
+            .set("Authorization", `Bearer ${jwtToken}`) //Token
             .query({ api_key: apiKey });
         expect(res.status).to.equal(200);
         expect(res.body).to.have.property("payments");
