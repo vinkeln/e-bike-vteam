@@ -13,15 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out repository
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '16'
 
       # 3. Install dependencies
       - name: Install dependencies
