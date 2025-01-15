@@ -39,7 +39,7 @@ jobs:
       - name: Run ESLint
         run: npx eslint .
 
-      # 7. Upload coverage report (optional)
+      # 7. Upload test coverage (optional)
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
