@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './components/HomePage';
 import Register from './components/Register';
 import Login from './components/Login';
+import UserProfile from './components/UserProfile';
 import About from './components/About';
 
 import './App.css';
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>

@@ -18,12 +18,13 @@ const Login = () => {
                 api_key: apiKey,
             });
 
-            if (!response.data.user_id) {
-                throw new Error("Invalid API response: Missing user ID");
+            // Kontrollera om token finns i svaret
+            if (!response.data.token) {
+                throw new Error("Invalid API response: Missing token");
             }
 
-            console.log("userId", response.data.user_id);
-            localStorage.setItem("userId", response.data.user_id);
+            // console.log("userId", response.data.user_id);
+            // localStorage.setItem("userId", response.data.user_id);
             localStorage.setItem("token", response.data.token);
             console.log("Login successful. Token:", response.data.token);
             navigate("/profile");
