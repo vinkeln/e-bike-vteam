@@ -25,21 +25,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Set up environment variables
+      # 4. Validate dependencies (optional)
+      - name: Validate dependencies
+        run: npm list --depth=0
+
+      # 5. Set up environment variables
       - name: Set up environment variables
         run: | 
           echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> .env
 
-      # 5. Run tests
+      # 6. Run tests
       - name: Run tests
         run: npm test
 
-      # 6. Lint code
+      # 7. Lint code
       - name: Run ESLint
         run: npx eslint .
 
-      # 7. Upload test coverage (optional)
+      # 8. Upload test coverage (optional)
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
