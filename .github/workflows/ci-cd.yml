@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - '**' # Pushar på alla grenar
   pull_request:
     branches:
-      - main
+      - '**' # Pull request på alla grenar
 
 jobs:
   build:
