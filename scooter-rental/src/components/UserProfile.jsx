@@ -1,50 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { getUserProfile, updateUserProfile } from '../api';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWallet } from '@fortawesome/free-solid-svg-icons'; // Importera wallet-ikonen
+import { faHistory } from '@fortawesome/free-solid-svg-icons'; // Importera History-ikonen
+import { faInfoCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Importera SignOut-ikonen
 
-const UserProfile = ({ userId }) => {
-    // State för att hantera användaruppgifter
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+const UserProfile = () => {
+    const user_id = localStorage.getItem('userId');
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const response = await getUserProfile(userId);
-                setName(response.data.name);
-                setEmail(response.data.email);
-            } catch (error) {
-                console.error('Error fetching user profile:', error);
-            }
-        };
-
-        fetchUserProfile();
-    }, [userId]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await updateUserProfile(userId, { name, email });
-            alert('Profile updated successfully!');
-        } catch (error) {
-            console.error('Error updating profile:', error);
-        }
+    const handleLogout = () => {
+        // Rensa localStorage
+        localStorage.removeItem('userId');
+        localStorage.removeItem('token');
+        localStorage.removeItem('name');
+        console.log('User logged out');
+        // Navigera till login-sidan
+        navigate('/login');
     };
-
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Your Profile</h2>
-            <label>
-                Name:
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </label>
-            <br />
-            <label>
-                Email:
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </label>
-            <br />
-            <button type="submit">Update Profile</button>
-        </form>
+        <div>
+            <h1>Welcome!</h1>
+            <p>Where do you want to go for a walk today?</p>
+            <h4>Choose what you want to do:</h4>
+            <p onClick={() => navigate('/travels')}>
+                <FontAwesomeIcon icon={faHistory}  /> View Previous Travels
+            </p>
+            <p onClick={() => navigate('/payment')}>
+                <FontAwesomeIcon icon={faWallet}  /> Wallet
+            </p>
+            <p onClick={() => navigate('/info')}>
+                <FontAwesomeIcon icon={faInfoCircle}  /> Info
+            </p>
+
+            <button onClick={handleLogout} className="logout">
+                <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> Logout
+            </button>
+        </div>
     );
 };
 

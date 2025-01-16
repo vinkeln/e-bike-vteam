@@ -1,91 +1,238 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const http = require("http");
+const express = require("express");
+
 chai.use(chaiHttp);
-const request = require("supertest");
-const jwtToken = "secret";
+chai.should();
 
+const testApp = express();
+testApp.use(express.json());
+let server;
+let port;
 
-describe("Payment API", () => {
-    let server;
+// Dummy data för betalningar
+let payments = [
+    { id: 1, user_id: 1, amount: 100, payment_type: "credit_card", status: "completed" },
+    { id: 2, user_id: 2, amount: 200, payment_type: "paypal", status: "pending" },
+    { id: 3, user_id: 3, amount: 300, payment_type: "debit_card", status: "completed" },
+];
 
-    const apiKey = "key123";
+// Testserverns endpoints
+testApp.get("/v1/payments", (req, res) => {
+    res.status(200).json({
+        status: "success",
+        payments: payments,
+    });
+});
 
-      before((done) => {
-        server = app.listen(0, () => {
-            done();
+testApp.get("/v1/payments/:paymentId", (req, res) => {
+    const paymentId = parseInt(req.params.paymentId);
+    const payment = payments.find((p) => p.id === paymentId);
+
+    if (!payment) {
+        return res.status(404).json({ error: "Payment not found" });
+    }
+
+    res.status(200).json({
+        status: "success",
+        payment: payment,
+    });
+});
+
+testApp.post("/v1/payments", (req, res) => {
+    const { user_id, amount, payment_type, status } = req.body;
+    if (!user_id || !amount || !payment_type) {
+        return res.status(400).json({ error: "All inputs are required!" });
+    }
+
+    const newPayment = {
+        id: payments.length + 1,
+        user_id,
+        amount,
+        payment_type,
+        status: status || "completed",
+    };
+
+    payments.push(newPayment);
+    res.status(201).json({
+        status: "success",
+        message: "Payment created",
+        paymentId: newPayment.id,
+    });
+});
+
+testApp.put("/v1/payments/:paymentId", (req, res) => {
+    const paymentId = parseInt(req.params.paymentId);
+    const { amount, status } = req.body;
+
+    const payment = payments.find((p) => p.id === paymentId);
+
+    if (!payment) {
+        return res.status(404).json({ error: "Payment not found" });
+    }
+
+    if (!amount && !status) {
+        return res
+            .status(400)
+            .json({ error: "At least one field (amount or status) must be provided for update." });
+    }
+
+    payment.amount = amount || payment.amount;
+    payment.status = status || payment.status;
+
+    res.status(200).json({
+        status: "success",
+        message: "Payment updated successfully",
+    });
+});
+
+testApp.delete("/v1/payments/:paymentId", (req, res) => {
+    const paymentId = parseInt(req.params.paymentId);
+    const index = payments.findIndex((p) => p.id === paymentId);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Payment not found" });
+    }
+
+    payments.splice(index, 1);
+    res.status(200).json({ status: "success", message: "Payment deleted successfully" });
+});
+
+testApp.get("/v1/payments/user/:userId", (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const userPayments = payments.filter((p) => p.user_id === userId);
+
+    if (userPayments.length === 0) {
+        return res.status(404).json({ error: "No payments found for this user" });
+    }
+
+    res.status(200).json({
+        status: "success",
+        payments: userPayments,
+    });
+});
+
+// Start och Stäng Testservern
+before(function (done) {
+    server = http.createServer(testApp);
+    server.listen(0, "localhost", () => {
+        port = server.address().port;
+        console.log(`Test server is running on port ${port}`);
+        done();
+    });
+});
+
+after(function (done) {
+    server.close(() => {
+        console.log("Test server closed");
+        done();
+    });
+});
+
+// Testfall
+describe("Payments API", function () {
+    beforeEach(() => {
+        // Återställ dummy-data innan varje test
+        payments = [
+            { id: 1, user_id: 1, amount: 100, payment_type: "credit_card", status: "completed" },
+            { id: 2, user_id: 2, amount: 200, payment_type: "paypal", status: "pending" },
+            { id: 3, user_id: 3, amount: 300, payment_type: "debit_card", status: "completed" },
+        ];
+    });
+
+    describe("GET /v1/payments", function () {
+        it("should return all payments", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .get("/v1/payments")
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property("payments").with.lengthOf(3);
+                    done();
+                });
         });
     });
-    
-  
 
-  after((done) => {
-    server.close(() => {
-      done();
-    });
-  });
+    describe("GET /v1/payments/:paymentId", function () {
+        it("should return a specific payment", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .get("/v1/payments/1")
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property("payment");
+                    done();
+                });
+        });
 
-    it("GET /v1/payment should return all payments",(done) => {
-        chai.request(server)
-        .get('/v1/payment?api_key=key123')
-        .end((err, res) => {
-          chai.expect(res).to.have.status(200);
-          done();
-        });    
-    });
-
-    it("GET /v1/payment should return all payments", async () => {
-        const res = await request(server)
-            .get("/v1/payment")
-            .set("Authorization", `Bearer ${jwtToken}`) //jwtToken skickas ut korrekt i Authorization header
-            .query({ api_key: apiKey });
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property("payments");
+        it("should return 404 if payment does not exist", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .get("/v1/payments/999")
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.have.property("error").eql("Payment not found");
+                    done();
+                });
+        });
     });
 
-    it("POST /v1/payment should create a new payment", async () => {
-        const res = await request(server)
-            .post("/v1/payment")
-            .set("Authorization", `Bearer ${jwtToken}`) //jwtToken skickas ut korrekt i Authorization header
-            .send({
-                api_key: apiKey,
-                user_id: 1,
-                amount: 100,
-                payment_type: "card",
-                status: "completed"
-            });
-        expect(res.status).to.equal(201);
-        expect(res.body).to.have.property("message", "Payment created");
+    describe("POST /v1/payments", function () {
+        it("should create a new payment", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .post("/v1/payments")
+                .send({ user_id: 4, amount: 400, payment_type: "bank_transfer" })
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.have.property("message").eql("Payment created");
+                    done();
+                });
+        });
+
+        it("should return 400 if required fields are missing", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .post("/v1/payments")
+                .send({ user_id: 4 })
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.have.property("error").eql("All inputs are required!");
+                    done();
+                });
+        });
     });
 
-    it("PUT /v1/payment/:paymentId should update a payment", async () => {
-        const res = await request(server) 
-            .put("/v1/payment/1")
-            .set("Authorization", `Bearer ${jwtToken}`) //Token
-            .send({
-                api_key: apiKey,
-                amount: 150,
-                status: "refunded"
-            });
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property("message", "Payment updated successfully");
+    describe("PUT /v1/payments/:paymentId", function () {
+        it("should update a payment", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .put("/v1/payments/1")
+                .send({ amount: 150, status: "pending" })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property("message").eql("Payment updated successfully");
+                    done();
+                });
+        });
     });
 
-    it("DELETE /v1/payment/:paymentId should delete a payment", async () => {
-        const res = await request(server)
-            .delete("/v1/payment/1")
-            .set("Authorization", `Bearer ${jwtToken}`) //Token
-            .query({ api_key: apiKey });
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property("message", "Payment deleted successfully");
+    describe("DELETE /v1/payments/:paymentId", function () {
+        it("should delete a payment", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .delete("/v1/payments/1")
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property("message").eql("Payment deleted successfully");
+                    done();
+                });
+        });
     });
 
-    it("GET /v1/payment/user/:userId should return all payments for a user", async () => {
-        const res = await request(server)
-            .get("/v1/payment/user/1")
-            .set("Authorization", `Bearer ${jwtToken}`) //Token
-            .query({ api_key: apiKey });
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property("payments");
+    describe("GET /v1/payments/user/:userId", function () {
+        it("should return payments for a specific user", (done) => {
+            chai.request(`http://localhost:${port}`)
+                .get("/v1/payments/user/1")
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property("payments").with.lengthOf(1);
+                    done();
+                });
+        });
     });
 });

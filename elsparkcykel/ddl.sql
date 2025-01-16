@@ -58,7 +58,7 @@ CREATE TABLE `payment` (
   `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_date` timestamp NULL DEFAULT current_timestamp(),
+  `payment_date` timestamp DEFAULT current_timestamp(),
   `payment_type` enum('prepaid', 'prenumeration') NOT NULL,
   `status` enum('genomförd', 'misslyckad') DEFAULT 'genomförd',
   PRIMARY KEY (`payment_id`),
@@ -69,11 +69,14 @@ CREATE TABLE `payment` (
 -- Tabell scooter
 CREATE TABLE `scooter` (
   `scooter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bike_serial_number` VARCHAR(50) NOT NULL UNIQUE,
   `current_location_id` int(11) DEFAULT NULL,
   `battery_level` int(11) NOT NULL,
-  `status` enum('ledig', 'upptagen', 'underhåll', 'avstänged') DEFAULT 'ledig',
+  `status` enum('ledig', 'upptagen', 'underhåll', 'avstängd') DEFAULT 'ledig',
   `speed` DECIMAL(5,2) DEFAULT NULL,
   `last_service_date` date DEFAULT NULL,
+  `current_latitude` DOUBLE,
+  `current_longitude` DOUBLE,
   PRIMARY KEY (`scooter_id`),
   KEY `current_location_id` (`current_location_id`),
   CONSTRAINT `scooter_ibfk_1` FOREIGN KEY (`current_location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL
@@ -85,7 +88,7 @@ CREATE TABLE `ride` (
   `ride_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `scooter_id` int(11) NOT NULL,
-  `start_location_id` int(11) NOT NULL,
+  `start_location_id` int(11) DEFAULT NULL,
   `end_location_id` int(11) DEFAULT NULL,
   `start_time` datetime NOT NULL,
   `end_time` datetime DEFAULT NULL,

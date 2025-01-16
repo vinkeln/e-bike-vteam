@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS ride;
 DROP TABLE IF EXISTS location;
 
 source ddl.sql;
+source ssl.sql;
