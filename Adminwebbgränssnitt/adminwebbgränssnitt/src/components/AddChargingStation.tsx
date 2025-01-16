@@ -16,7 +16,7 @@ const AddChargingStation = () => {
     cityId: "",
     latitude: "",
     longitude: "",
-    totalPorts: ""
+    totalPorts: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [message, setMessage] = useState("");
@@ -26,10 +26,11 @@ const AddChargingStation = () => {
     if (!formValues.cityId) newErrors.cityId = "City ID is required";
     if (!formValues.latitude) newErrors.latitude = "Latitude is required";
     if (!formValues.longitude) newErrors.longitude = "Longitude is required";
-    if (!formValues.totalPorts) newErrors.totalPorts = "Total ports is required";
+    if (!formValues.totalPorts)
+      newErrors.totalPorts = "Total ports is required";
+
     return newErrors;
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
@@ -37,11 +38,9 @@ const AddChargingStation = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting form", formValues);
     const formErrors = validateForm();
-    console.log("Form Errors", formErrors);
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
@@ -55,14 +54,14 @@ const AddChargingStation = () => {
         formValues.totalPorts
       );
       if (result === "ok") {
-        setMessage("Station added successfully!");
+        setMessage("Parking added successfully!");
         navigate("/");
       } else {
         setMessage(result);
       }
     } catch (error) {
-      console.error("Error adding station:", error);
-      setMessage("Failed to add station. Please try again. Error: " + error.message);
+      setMessage("Failed to add parking. Please try again.");
+      console.error("Error adding parking:", error);
     }
   };
 

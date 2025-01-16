@@ -9,7 +9,7 @@ const AddButtons = ({ page, text }: Props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(page); // Navigerar till sidan baserat på page-prop
+    navigate(`/${page}`); // Navigerar till sidan baserat på page-prop
   };
 
   return (

@@ -21,8 +21,8 @@ const UserProfile = () => {
         <div>
             <h1>Welcome User!</h1>
             <h4>Choose what you want to do:</h4>
-            <p onClick={() => navigate('/travels')}>
-                <FontAwesomeIcon icon={faHistory}  /> View Previous Travels
+            <p onClick={() => navigate('/MapRender')}>
+                <FontAwesomeIcon icon={faHistory}  /> Show Map
             </p>
             <p onClick={() => navigate('/info')}>
                 <FontAwesomeIcon icon={faInfoCircle}  /> Info

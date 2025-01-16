@@ -50,19 +50,14 @@ function Navbar() {
                 Contact
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="nav-link" to="/mapRender">
                 Map
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link className="nav-link" to="/customers">
                 Customers
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/socketTest">
-                socket Test
               </Link>
             </li>
           </ul>

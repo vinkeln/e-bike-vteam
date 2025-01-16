@@ -3,8 +3,10 @@ import { apiKey, baseURL } from "../utils.ts"; // Antag att baseURL och apiKey e
 import auth from "./auths.ts";
 
 interface ChargingStation {
+  location_id?: string;
   latitude: string;
   longitude: string;
+  api_key?: string;
   city_id: string;
   total_ports: string;
 }

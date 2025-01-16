@@ -7,7 +7,7 @@ import Login from './components/Login';
 import UserProfile from './components/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import About from './components/About';
-
+import MapRender from './Map/MapRender';
 import './App.css';
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
           </ProtectedRoute>
         } />
           <Route path="/about" element={<About />} />
+          <Route path="/mapRender" element={<MapRender />} />
         </Routes>
       </div>
     </Router>
