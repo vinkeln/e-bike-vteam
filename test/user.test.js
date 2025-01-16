@@ -16,8 +16,8 @@ testApp.get("/v1/user/users", (req, res) => {
     res.status(200).json({
         message: "ALL users",
         users: [
-            { id: 1, name: "Test User 1" },
-            { id: 2, name: "Test User 2" },
+            { user_id: 1, name: "Test User 1" },
+            { user_id: 2, name: "Test User 2" },
         ],
     });
 });
@@ -81,7 +81,7 @@ testApp.put("/v1/user/update/password", (req, res) => {
 before(function (done) {
     this.timeout(10000);
     server = http.createServer(testApp);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
         port = server.address().port;
         done();
     });
@@ -101,7 +101,7 @@ describe("User API", function () {
 
     describe("GET /users", function () {
         it("should return a list of all users", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/user/users")
                 .end((err, res) => {
                     if (err) return done(err);
@@ -118,7 +118,7 @@ describe("User API", function () {
 
     describe("POST /signup", function () {
         it("should create a new user", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .post("/v1/user/signup")
                 .set("api_key", "key123")
                 .send({
@@ -137,7 +137,7 @@ describe("User API", function () {
         });
 
         it("should return 409 if the email already exists", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .post("/v1/user/signup")
                 .set("api_key", "key123")
                 .send({
@@ -157,7 +157,7 @@ describe("User API", function () {
 
     describe("DELETE /users/:userId", function () {
         it("should delete a user", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .delete("/v1/user/users/1")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -167,7 +167,7 @@ describe("User API", function () {
         });
     
         it("should return 404 if the user does not exist", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .delete("/v1/user/users/999")
                 .end((err, res) => {
                     res.should.have.status(404);
@@ -179,7 +179,7 @@ describe("User API", function () {
     
     describe("PUT /update/password", function () {
         it("should update the user's password", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/user/update/password")
                 .send({
                     user_id: 1,
@@ -195,7 +195,7 @@ describe("User API", function () {
         });
     
         it("should return 400 if the old password is incorrect", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/user/update/password")
                 .send({
                     user_id: 1,
@@ -211,7 +211,7 @@ describe("User API", function () {
         });
     
         it("should return 404 if the user does not exist", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/user/update/password")
                 .send({
                     user_id: 999,

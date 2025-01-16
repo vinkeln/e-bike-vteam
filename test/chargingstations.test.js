@@ -107,7 +107,7 @@ testApp.put("/v1/chargingstations/update/port", (req, res) => {
 // Start och Stäng Testservern
 before(function (done) {
     server = http.createServer(testApp);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
         port = server.address().port;
         console.log(`Test server is running on port ${port}`);
         done();
@@ -125,7 +125,7 @@ after(function (done) {
 describe("Charging Stations API", function () {
     describe("GET /v1/chargingstations", function () {
         it("should return all charging stations", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/chargingstations")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -137,7 +137,7 @@ describe("Charging Stations API", function () {
 
     describe("GET /v1/chargingstations/:cityId", function () {
         it("should return charging stations for a city", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/chargingstations/1")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -147,7 +147,7 @@ describe("Charging Stations API", function () {
         });
 
         it("should return 409 if city has no charging stations", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/chargingstations/999")
                 .end((err, res) => {
                     res.should.have.status(409);
@@ -159,7 +159,7 @@ describe("Charging Stations API", function () {
 
     describe("POST /v1/chargingstations/add", function () {
         it("should add a new charging station", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .post("/v1/chargingstations/add")
                 .send({ latitude: 59.8586, longitude: 17.6389, total_ports: 15, city_id: 1 })
                 .end((err, res) => {
@@ -170,7 +170,7 @@ describe("Charging Stations API", function () {
         });
 
         it("should return 409 if charging station exists", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .post("/v1/chargingstations/add")
                 .send({ latitude: 59.3293, longitude: 18.0686, total_ports: 10, city_id: 1 })
                 .end((err, res) => {
@@ -183,7 +183,7 @@ describe("Charging Stations API", function () {
 
     describe("DELETE /v1/chargingstations/:locationId", function () {
         it("should delete a charging station", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .delete("/v1/chargingstations/1")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -193,7 +193,7 @@ describe("Charging Stations API", function () {
         });
 
         it("should return 404 if charging station does not exist", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .delete("/v1/chargingstations/999")
                 .end((err, res) => {
                     res.should.have.status(404);
@@ -205,7 +205,7 @@ describe("Charging Stations API", function () {
 
     describe("PUT /v1/chargingstations/update", function () {
         it("should update a charging station", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/chargingstations/update")
                 .send({ location_id: 2, latitude: 59.9138, total_ports: 20 })
                 .end((err, res) => {
@@ -216,7 +216,7 @@ describe("Charging Stations API", function () {
         });
 
         it("should return 404 if charging station does not exist", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/chargingstations/update")
                 .send({ location_id: 999, latitude: 59.8586 })
                 .end((err, res) => {
@@ -229,7 +229,7 @@ describe("Charging Stations API", function () {
 
     describe("PUT /v1/chargingstations/update/port", function () {
         it("should update ports for a charging station", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/chargingstations/update/port")
                 .send({ location_id: 2, new_ports: 5 })
                 .end((err, res) => {
@@ -240,7 +240,7 @@ describe("Charging Stations API", function () {
         });
 
         it("should return 404 if charging station does not exist", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .put("/v1/chargingstations/update/port")
                 .send({ location_id: 999, new_ports: 5 })
                 .end((err, res) => {

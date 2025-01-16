@@ -66,7 +66,7 @@ testApp.delete("/v1/cities/:cityId", (req, res) => {
 
 describe("GET /v1/cities", function () {
     it("should return a list of all cities", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .get("/v1/cities")
             .end((err, res) => {
                 res.should.have.status(200);
@@ -81,7 +81,7 @@ describe("GET /v1/cities", function () {
 
 describe("POST /v1/cities/add", function () {
     it("should add a new city", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .post("/v1/cities/add")
             .send({ name: "Copenhagen", country: "Denmark" })
             .end((err, res) => {
@@ -94,7 +94,7 @@ describe("POST /v1/cities/add", function () {
     });
 
     it("should return 409 if the city already exists", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .post("/v1/cities/add")
             .send({ name: "Stockholm", country: "Sweden" })
             .end((err, res) => {
@@ -108,7 +108,7 @@ describe("POST /v1/cities/add", function () {
 
 describe("DELETE /v1/cities/:cityId", function () {
     it("should delete a city", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .delete("/v1/cities/1")
             .end((err, res) => {
                 res.should.have.status(200);
@@ -119,7 +119,7 @@ describe("DELETE /v1/cities/:cityId", function () {
     });
 
     it("should return 404 if the city does not exist", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .delete("/v1/cities/999")
             .end((err, res) => {
                 res.should.have.status(404);
@@ -133,7 +133,7 @@ describe("DELETE /v1/cities/:cityId", function () {
 before(function (done) {
     this.timeout(10000);
     server = http.createServer(testApp);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
         port = server.address().port;
         console.log(`Test server is running on port ${port}`);
         done();

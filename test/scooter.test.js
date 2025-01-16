@@ -38,7 +38,7 @@ testApp.get("/v1/scooters/:bikeId", (req, res) => {
 // Server setup
 before((done) => {
     server = http.createServer(testApp);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
         port = server.address().port;
         console.log(`Test server is running on port ${port}`);
         done();
@@ -56,7 +56,7 @@ after((done) => {
 describe("Scooter API", () => {
     describe("GET /v1/scooters", () => {
         it("should return a list of all scooters", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/scooters")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -68,7 +68,7 @@ describe("Scooter API", () => {
 
     describe("GET /v1/scooters/:bikeId", () => {
         it("should return a specific scooter", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/scooters/1")
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -78,7 +78,7 @@ describe("Scooter API", () => {
         });
 
         it("should return 404 if the scooter is not found", (done) => {
-            chai.request(`http://127.0.0.1:${port}`)
+            chai.request(`http://localhost:${port}`)
                 .get("/v1/scooters/999")
                 .end((err, res) => {
                     res.should.have.status(404);

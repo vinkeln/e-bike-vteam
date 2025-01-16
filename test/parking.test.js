@@ -91,7 +91,7 @@ testApp.put("/v1/parkings/update", (req, res) => {
 
 describe("GET /v1/parkings", function () {
     it("should return a list of all parking zones", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .get("/v1/parkings")
             .end((err, res) => {
                 res.should.have.status(200);
@@ -103,7 +103,7 @@ describe("GET /v1/parkings", function () {
 
 describe("GET /v1/parkings/:cityId", function () {
     it("should return parkings for a city", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .get("/v1/parkings/1")
             .end((err, res) => {
                 res.should.have.status(200);
@@ -113,7 +113,7 @@ describe("GET /v1/parkings/:cityId", function () {
     });
 
     it("should return 409 if city has no parkzones", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .get("/v1/parkings/999")
             .end((err, res) => {
                 res.should.have.status(409);
@@ -125,7 +125,7 @@ describe("GET /v1/parkings/:cityId", function () {
 
 describe("POST /v1/parkings/add", function () {
     it("should add a new parking zone", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .post("/v1/parkings/add")
             .send({ latitude: 59.8586, longitude: 17.6389, city_id: 1, capacity: 15, max_speed: 40 })
             .end((err, res) => {
@@ -136,7 +136,7 @@ describe("POST /v1/parkings/add", function () {
     });
 
     it("should return 409 if parking zone exists", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .post("/v1/parkings/add")
             .send({ latitude: 59.3293, longitude: 18.0686, city_id: 1, capacity: 10, max_speed: 50 })
             .end((err, res) => {
@@ -149,7 +149,7 @@ describe("POST /v1/parkings/add", function () {
 
 describe("DELETE /v1/parkings/:locationId", function () {
     it("should delete a parking zone", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .delete("/v1/parkings/1")
             .end((err, res) => {
                 res.should.have.status(200);
@@ -159,7 +159,7 @@ describe("DELETE /v1/parkings/:locationId", function () {
     });
 
     it("should return 404 if parking zone does not exist", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .delete("/v1/parkings/999")
             .end((err, res) => {
                 res.should.have.status(404);
@@ -171,7 +171,7 @@ describe("DELETE /v1/parkings/:locationId", function () {
 
 describe("PUT /v1/parkings/update", function () {
     it("should update a parking zone", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .put("/v1/parkings/update")
             .send({ location_id: 2, latitude: 59.9138, max_speed: 70 })
             .end((err, res) => {
@@ -182,7 +182,7 @@ describe("PUT /v1/parkings/update", function () {
     });
 
     it("should return 404 if parking zone does not exist", (done) => {
-        chai.request(`http://127.0.0.1:${port}`)
+        chai.request(`http://localhost:${port}`)
             .put("/v1/parkings/update")
             .send({ location_id: 999, latitude: 59.8586 })
             .end((err, res) => {
@@ -196,7 +196,7 @@ describe("PUT /v1/parkings/update", function () {
 before(function (done) {
     this.timeout(10000);
     server = http.createServer(testApp);
-    server.listen(0, "127.0.0.1", () => {
+    server.listen(0, "localhost", () => {
         port = server.address().port;
         console.log(`Test server is running on port ${port}`);
         done();
