@@ -19,7 +19,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' # Installera Node.js version 20
+
+      - name: Install node-fetch # Installera node-fetch (ny)
+        run: npm install node-fetch    
 
       # 3. Clear npm cache
       - name: Clear npm cache
