@@ -3,45 +3,55 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - '**' # Pushar på alla grenar
   pull_request:
     branches:
-      - main
+      - '**' # Pull request på alla grenar
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out repository
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '16'
 
-      # 3. Install dependencies
+      # 3. Clear npm cache
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      # 4. Set NODE_ENV to development
+      - name: Set NODE_ENV to development
+        run: echo "NODE_ENV=development" >> $GITHUB_ENV
+
+      # 5. Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 4. Set up environment variables
+      # 6. Validate dependencies (optional)
+      - name: Validate dependencies
+        run: npm list --depth=0
+
+      # 7. Set up environment variables
       - name: Set up environment variables
         run: | 
           echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           echo "JWT_KEY=${{ secrets.JWT_KEY }}" >> .env
 
-      # 5. Run tests
+      # 8. Run tests
       - name: Run tests
         run: npm test
 
-      # 6. Lint code
+      # 9. Lint code
       - name: Run ESLint
         run: npx eslint .
 
-      # 7. Upload coverage report (optional)
+      # 10. Upload test coverage (optional)
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
