@@ -31,7 +31,7 @@ jobs:
 
       # 5. Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci #npm install
 
       # 6. Validate dependencies (optional)
       - name: Validate dependencies

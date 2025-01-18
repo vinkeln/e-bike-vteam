@@ -10,7 +10,7 @@ tools:
 build:
     environment:
         node:
-            version: "20"  # Node.js kan ändra till 18
+            version: "18"  # Node.js
 
 filter:
     paths:
