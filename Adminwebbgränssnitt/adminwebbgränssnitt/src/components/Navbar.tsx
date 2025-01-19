@@ -60,6 +60,11 @@ function Navbar() {
                 Customers
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/sockettest">
+                test
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

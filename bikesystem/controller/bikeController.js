@@ -6,9 +6,9 @@ let isDisabled = false;
 // Connect to the WebSocket server
 const socket = io("http://localhost:3000");
 const travelLogs = [];
-const bikeSerialNumber = "12344";
+const bikeSerialNumber = "12345";
 let currentLongitude = 18.0632;
-let currentLatitude = 59.3345;
+let currentLatitude = 59.3293;
 let batteryLevel = 100;
 let statusInterval; // För att hålla koll på statusuppdateringar
 let chargingInterval; // För att hålla koll på laddningen

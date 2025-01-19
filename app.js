@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 // Rate limiting middleware to restrict the number of requests per minute
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // Time frame of 1 minute
-  max: 100, // Maximum 100 requests per IP in the time frame
+  max: 1000000, // Maximum 100 requests per IP in the time frame
   message: "Too many requests, please try again later.", // Message returned when limit is exceeded
 });
 app.use(limiter); // Apply rate limiting globally

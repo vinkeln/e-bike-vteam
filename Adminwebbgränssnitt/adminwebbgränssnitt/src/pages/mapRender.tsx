@@ -50,10 +50,8 @@ const ChargingStationsMap = () => {
     }, // Hårdkodad station
   ]);
 
-  const [bikes, setBikes] = useState<Bike[]>([
-    { id: 1, latitude: 59.3294, longitude: 18.0687, status: "Ledig" },
-    { id: 2, latitude: 59.3396, longitude: 18.069, status: "Upptagen" },
-  ]);
+  const [bikeData, setBikeData] = useState({}); // Dict för cykeldata
+
   const [parkingZones, setParkingZones] = useState<ParkingZone[]>([
     {
       zone_id: 4,
@@ -68,22 +66,14 @@ const ChargingStationsMap = () => {
   useEffect(() => {
     fetchStations();
     fetchParkingZones();
-    socket.on("bikeNotification", (bike) => {
-      console.log("Received bike data:", bike);
-      setBikes((prevBikes) => {
-        const existingBikeIndex = prevBikes.findIndex((b) => b.id === bike.id);
-        if (existingBikeIndex >= 0) {
-          const newBikes = [...prevBikes];
-          newBikes[existingBikeIndex] = {
-            ...bike,
-            batteryLevel: bike.batteryLevel,
-            speed: bike.speed,
-          };
-          return newBikes;
-        } else {
-          return [...prevBikes, bike];
-        }
-      });
+    socket.on("bikeNotification", (data) => {
+      console.log("Received data:", data);
+
+      // Uppdatera state baserat på bikeSerialNumber
+      setBikeData((prev) => ({
+        ...prev,
+        [data.bikeSerialNumber]: data, // Uppdatera eller lägg till cykeln
+      }));
     });
     return () => {
       socket.off("bikeNotification");
@@ -148,7 +138,7 @@ const ChargingStationsMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <MapMarkers
-          bikes={bikes}
+          bikes={bikeData}
           chargingStations={stations}
           parkingZones={parkingZones}
         />

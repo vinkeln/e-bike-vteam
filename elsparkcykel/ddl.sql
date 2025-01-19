@@ -73,7 +73,7 @@ CREATE TABLE `scooter` (
   `scooter_id` int(11) NOT NULL AUTO_INCREMENT,
   `current_location_id` int(11) DEFAULT NULL,
   `battery_level` int(11) NOT NULL,
-  `status` enum('ledig', 'upptagen', 'underhåll'. 'avstänged') DEFAULT 'ledig',
+  `status` enum('ledig', 'upptagen', 'underhåll', 'avstänged') DEFAULT 'ledig',
   `speed` DECIMAL(5,2) DEFAULT NULL,
   `last_service_date` date DEFAULT NULL,
   PRIMARY KEY (`scooter_id`),
