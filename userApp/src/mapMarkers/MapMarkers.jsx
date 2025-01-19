@@ -1,8 +1,24 @@
 import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import PropTypes from 'prop-types';
+import parkingIconUrl from '../icons/parking.png';
+import stationIconUrl from '../icons/station.png';
+import L from 'leaflet';
 
-// Komponenten som renderar markers för cyklar
+
+const parkingIcon = new L.Icon({
+    iconUrl: parkingIconUrl,
+    iconSize: [30, 30], // Size of icon
+    iconAnchor: [15, 30] // Icon centered correct by its position
+  });
+  
+  const stationIcon = new L.Icon({
+    iconUrl: stationIconUrl,
+    iconSize: [30, 30],
+    iconAnchor: [15, 30]
+  });
+
+// Component to render bikes
 export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
     return (
         <>
@@ -17,7 +33,7 @@ export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
                 </Marker>
             ))}
             {chargingStations?.map(station => (
-                <Marker key={station.station_id} position={[station.latitude, station.longitude]}>
+                <Marker key={station.station_id} position={[station.latitude, station.longitude]} icon={stationIcon}>
                     <Popup>
                         Chargingstation ID: {station.station_id}<br />
                         Total ports: {station.total_ports}<br />
@@ -26,7 +42,7 @@ export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
                 </Marker>
             ))}
             {parkings_zones?.map(zone => (
-                <Marker key={zone.zone_id} position={[zone.latitude, zone.longitude]}>
+                <Marker key={zone.zone_id} position={[zone.latitude, zone.longitude]} icon={parkingIcon}>
                     <Popup>
                         Parking Zone ID: {zone.zone_id}<br />
                         Max Speed: {zone.max_speed} km/h<br />
