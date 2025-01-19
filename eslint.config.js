@@ -1,26 +1,28 @@
-module.exports = {
-    env: {
-        browser: true,
-        es2021: true,
-        node: true,
-    },
-    extends: [
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
-    ],
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
+const { FlatCompat } = require('@eslint/eslintrc');
+const compat = new FlatCompat();
+
+module.exports = [
+    {
+        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
         },
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        plugins: {
+            react: require('eslint-plugin-react'),
+            '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+        },
+        rules: {
+            // Lägg till dina specifika ESLint-regler här
+        },
     },
-    plugins: [
-        'react',
-        '@typescript-eslint',
-    ],
-    rules: {
-    },
-};
+    ...compat.extends('eslint:recommended'),
+    ...compat.extends('plugin:react/recommended'),
+    ...compat.extends('plugin:@typescript-eslint/recommended'),
+];
