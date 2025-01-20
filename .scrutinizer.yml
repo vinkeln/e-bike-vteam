@@ -12,8 +12,7 @@ build:
         node:
             version: "18"  # Node.js
     branches:
-        only:
-            -all # Pushar på alla grenar
+        only: all # Pushar på alla grenar
 filter:
     paths:
         - "src/*"  # React-kod i 'src/'
