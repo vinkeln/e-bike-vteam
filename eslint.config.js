@@ -1,5 +1,10 @@
 const { FlatCompat } = require('@eslint/eslintrc');
-const compat = new FlatCompat();
+const { ESLint } = require('eslint');
+
+const compat = new FlatCompat({
+    baseDirectory: __dirname, // Lägg till baseDirectory
+    recommendedConfig: ESLint.recommended // Lägg till recommendedConfig
+});
 
 module.exports = [
     {

@@ -14,21 +14,26 @@ build:
 
 filter:
     paths:
-        - "src/*"  # Ange vilka filer eller mappar som ska analyseras (React-kod finns i 'src/' eller scooter-rental)
-        - "backend/*"  # har backend-kod i en separat mapp
+        - "src/*"  # React-kod i 'src/'
+        - "backend/*"  # Backend-kod i en separat mapp
 
 checks:
-    javascript: # Ange vilka ESLint-regler som ska användas
+    javascript: 
         code_rating: true
         unused_variables: true
         no_console: true
-        complexity: true  # Kontrollera komplexitet i kod
+        complexity: true  # Kontrollera kodkomplexitet
     sql:
-        sql_injection: true  # Analysera kod för potentiella SQL-injection risker
+        sql_injection: true  # SQL-injection analys
         unused_queries: true  # Identifiera oanvända SQL-frågor
 
-# Lägg till testkonfigurationer använder tester
+# Testkonfiguration
 tests:
     override:
         - "npm install"
         - "npm test"
+
+# Aktivera kodkvalitetsbetyg (code rating)
+code_quality:
+    enabled: true
+
