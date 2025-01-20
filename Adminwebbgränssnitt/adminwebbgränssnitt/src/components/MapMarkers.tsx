@@ -52,35 +52,6 @@ export const MapMarkers: React.FC<MapMarkersProps> = ({
     iconAnchor: [12, 41],
   });
 
-<<<<<<< Updated upstream
-    return (
-        <>
-            {bikes.map((bike) => (
-                <Marker key={bike.id} position={[bike.latitude, bike.longitude]}>
-                    <Popup>
-                        Status: {bike.status}<br />
-                        Battery Level: {bike.batteryLevel !== undefined ? `${bike.batteryLevel.toFixed(2)}%` : 'N/A'}<br />
-                        Speed: {bike.speed !== undefined ? `${bike.speed} km/h` : 'N/A'}
-                    </Popup>
-                </Marker>
-            ))}
-            {chargingStations.map(station => (
-                <Marker key={station.station_id} position={[station.latitude, station.longitude]} icon={chargingStationMarkerIcon}>
-                    <Popup>Station ID: {station.station_id}<br />Available Ports: {station.available_ports}</Popup>
-                </Marker>
-            ))}
-            {parkingZones.map(zone => (
-                <Marker key={zone.zone_id} position={[zone.latitude, zone.longitude]} icon={parkingZoneMarkerIcon}>
-                    <Popup>
-                        Zone ID: {zone.zone_id}<br />
-                        Max Speed: {zone.max_speed} km/h<br />
-                        Capacity: {zone.capacity}
-                    </Popup>
-                </Marker>
-            ))}
-        </>
-    );
-=======
   return (
     <>
       {Object.values(bikes).map(
