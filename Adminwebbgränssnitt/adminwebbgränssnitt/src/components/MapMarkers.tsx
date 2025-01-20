@@ -3,6 +3,8 @@ import { Marker, Popup } from "react-leaflet";
 import L from "leaflet"; // Import Leaflet
 import chargingStationIcon from "../icons/station.png";
 import parkingZoneIcon from "../icons/parking.png";
+import availableBike from "../icons/availablebike.png";
+import unavailablebike from "../icons/unavailablebike.png";
 
 export interface Bike {
   id: number;
@@ -30,10 +32,33 @@ export interface ParkingZone {
 }
 
 interface MapMarkersProps {
-  bikes: { [id: number]: Bike }; // Bikes är nu ett objekt istället för en array
+  bikes: { [id: number]: Bike }; // Bikes is now a object instead of a array
   chargingStations: ChargingStation[];
   parkingZones: ParkingZone[];
 }
+
+const getBikeIcon = (status) => {
+  switch (status) {
+    case 'ledig':
+      return new L.Icon({
+        iconUrl: availableBike,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      });
+    case 'upptagen':
+      return new L.Icon({
+        iconUrl: unavailablebike,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      });
+    default:
+      return new L.Icon({
+        iconUrl: availableBike,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      });
+  }
+};
 
 export const MapMarkers: React.FC<MapMarkersProps> = ({
   bikes,
@@ -51,6 +76,7 @@ export const MapMarkers: React.FC<MapMarkersProps> = ({
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   });
+  
 
   return (
     <>
@@ -58,7 +84,7 @@ export const MapMarkers: React.FC<MapMarkersProps> = ({
         (
           bike // Iterera över objektet med Object.values
         ) => (
-          <Marker key={bike.id} position={[bike.latitude, bike.longitude]}>
+          <Marker key={bike.id} position={[bike.latitude, bike.longitude]} icon={getBikeIcon(bike.status)}>
             <Popup>
               Status: {bike.status}
               <br />
@@ -102,5 +128,4 @@ export const MapMarkers: React.FC<MapMarkersProps> = ({
       ))}
     </>
   );
->>>>>>> Stashed changes
 };
