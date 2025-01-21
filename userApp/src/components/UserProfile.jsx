@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHistory } from '@fortawesome/free-solid-svg-icons'; // Importera History-ikonen
-import { faInfoCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Importera SignOut-ikonen
+import { faMapMarkedAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Importera SignOut-ikonen
 
 const UserProfile = () => {
     const user_id = localStorage.getItem('userId');
@@ -20,14 +20,10 @@ const UserProfile = () => {
     return (
         <div>
             <h1>Welcome User!</h1>
-            <h4>Choose what you want to do:</h4>
-            <p onClick={() => navigate('/MapRender')}>
-                <FontAwesomeIcon icon={faHistory}  /> Show Map
-            </p>
-            <p onClick={() => navigate('/info')}>
-                <FontAwesomeIcon icon={faInfoCircle}  /> Info
-            </p>
-
+            <h3>Choose what you want to do:</h3>
+            <h4 onClick={() => navigate('/MapRender')}>
+                <FontAwesomeIcon icon={faMapMarkedAlt}  /> Show Map
+            </h4>
             <button onClick={handleLogout} className="logout">
                 <FontAwesomeIcon icon={faSignOutAlt} className="icon" /> Logout
             </button>

@@ -8,7 +8,7 @@ const Home = () => {
 
     return (
         <div>
-            <h1>Scooter Rental Service</h1>
+            <h1>Scooter Rental Service App</h1>
             <p>
                 Welcome to our e-bike rental application! We are committed to providing a sustainable and eco-friendly way to explore your city.
             </p>
@@ -16,7 +16,7 @@ const Home = () => {
             <button onClick={() => navigate('/login')}>Login</button>
         
             <p onClick={() => navigate('/about')}>
-                <FontAwesomeIcon icon={faQuestionCircle} /> About
+                <FontAwesomeIcon icon={faQuestionCircle} /> About Us!
             </p>
         </div>
     );

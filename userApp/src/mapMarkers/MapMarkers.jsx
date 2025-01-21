@@ -3,8 +3,15 @@ import { Marker, Popup } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import parkingIconUrl from '../icons/parking.png';
 import stationIconUrl from '../icons/station.png';
+import availableBike from '../icons/availablebike.png';
 import L from 'leaflet';
 
+
+const availableBikeIcon = new L.icon({
+    iconUrl: availableBike,
+    iconSize: [30, 30],
+    iconAnchor: [15, 30]
+})
 
 const parkingIcon = new L.Icon({
     iconUrl: parkingIconUrl,
@@ -22,12 +29,12 @@ const parkingIcon = new L.Icon({
 export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
     return (
         <>
-            {bikes.map(bike => (
-                <Marker key={bike.scooter_id} position={[bike.current_latitude, bike.current_longitude]}>
+            {Object.values(bikes).map(bike => (
+                <Marker key={bike.id} position={[bike.latitude, bike.longitude]} icon={availableBikeIcon}>
                     <Popup>
-                        Bike ID: {bike.scooter_id}<br />
+                        Bike ID: {bike.id}<br />
                         Status: {bike.status}<br />
-                        Battery level: {bike.battery_level ? `${bike.battery_level.toFixed(2)}%` : 'N/A'}<br />
+                        Battery level: {bike.batteryLevel ? `${bike.batteryLevel.toFixed(2)}%` : 'N/A'}<br />
                         Speed: {bike.speed ? `${bike.speed} km/h` : 'N/A'}
                     </Popup>
                 </Marker>
@@ -55,7 +62,7 @@ export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
 };
 
 MapMarkers.propTypes = {
-    bikes: PropTypes.arrayOf(PropTypes.shape({
+    bikes: PropTypes.objectOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         latitude: PropTypes.number.isRequired,
         longitude: PropTypes.number.isRequired,

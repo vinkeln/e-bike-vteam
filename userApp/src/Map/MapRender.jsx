@@ -11,7 +11,10 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:3000");
 
 const MapRender = () => {
-    const [bikes, setBikes] = useState([]);
+    const [bikes, setBikes] = useState({
+        1: { id: 1, latitude: 59.3293, longitude: 18.0686, status: 'ledig', batteryLevel: 85, speed: 12.5 },
+        2: { id: 2, latitude: 57.7089, longitude: 11.9746, status: 'upptagen', batteryLevel: 65, speed: 10.0 }
+    });
     const [chargingStations, setChargingStations] = useState([]);
     const [parkings_zones, setParkingZones] = useState([]);
 
@@ -19,7 +22,11 @@ const MapRender = () => {
         // Fetch bikes
         fetchBikes('key123').then(data => {
             if (data.Message === 'Success' && data.bikes) {
-                setBikes(data.bikes);
+                const newBikes = {};
+                data.bikes.forEach(bike => {
+                    newBikes[bike.bike.id] = bike;
+                });
+                setBikes(newBikes);
             }
         }).catch(error => {
             console.error('Error fetching bikes:', error);
@@ -54,8 +61,12 @@ const MapRender = () => {
         });
 
         // Setup socket listeners
-        socket.on("updateBikes", (newBikes) => {
-            setBikes(newBikes);
+        socket.on("updateBikes", (bike) => {
+            setBikes(prevBikes => {
+                const updatedBikes = {...prevBikes};
+                updatedBikes[bike.id] = bike;
+                return updatedBikes;
+            });
         });
         socket.on("updateParkingZones", (newZones) => {
             setParkingZones(newZones);
