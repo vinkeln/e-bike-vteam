@@ -2,10 +2,7 @@ tools:
     eslint:
         config:
             extends: "react-app" # Använder ESLint-konfigurationen som skapades av Create React App
-    sql_lint:
-        enabled: true
-    sql_query_analyzer:
-        enabled: true
+
 
 build:
     environment:
