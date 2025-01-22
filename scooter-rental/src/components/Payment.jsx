@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
+    const [error] = useState('');
     const [amount, setAmount] = useState('');
     const [method, setMethod] = useState('prepaid');
     const navigate = useNavigate();

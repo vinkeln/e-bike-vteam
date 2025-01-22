@@ -6,7 +6,7 @@ const Register = () => {
     const [name, setName] = useState('');
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('user');
+    const [role] = useState('user');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 

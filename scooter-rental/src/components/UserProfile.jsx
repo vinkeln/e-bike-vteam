@@ -6,7 +6,7 @@ import { faHistory } from '@fortawesome/free-solid-svg-icons'; // Importera Hist
 import { faInfoCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Importera SignOut-ikonen
 
 const UserProfile = () => {
-    const user_id = localStorage.getItem('userId');
+    // const user_id = localStorage.getItem('userId');
     const navigate = useNavigate();
 
     const handleLogout = () => {

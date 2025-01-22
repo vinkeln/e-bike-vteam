@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const token = localStorage.getItem('token');
+            // const token = localStorage.getItem('token');
             const apiKey = "key123"; // API-nyckel
             const response = await axios.post("http://localhost:3000/v1/user/login", {
                 mail: email,
@@ -52,7 +52,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
             />
             <button onClick={handleLogin}>Login</button>
-            <p>Don't have an account? <a href="/register">Register here</a></p>
+            <p>Don&apos;t have an account? <a href="/register">Register here</a></p>
         </div>
     );
 };
