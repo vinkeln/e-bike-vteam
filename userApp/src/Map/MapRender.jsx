@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapMarkers } from '../mapMarkers/MapMarkers';
 import chargingStationModule from '../modules/chargingStations';
@@ -11,6 +11,7 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:3000");
 
 const MapRender = () => {
+    const [position, setPosition] = useState([59.3293, 18.0686]); // Default to Stockholm coordinates
     const [bikes, setBikes] = useState({
         1: { id: 1, latitude: 59.3293, longitude: 18.0686, status: 'ledig', batteryLevel: 85, speed: 12.5 },
         2: { id: 2, latitude: 57.7089, longitude: 11.9746, status: 'upptagen', batteryLevel: 65, speed: 10.0 }
@@ -80,14 +81,28 @@ const MapRender = () => {
         };
     }, []); // Ensure this runs only once
 
-    const position = [59.3293, 18.0686]; // Stockholm coordinates
+    const cities = {
+        Stockholm: [59.3293, 18.0686],
+        Göteborg: [57.7089, 11.9746],
+        Malmö: [55.6050, 13.0038]
+    };
+
+    const handleCityChange = (event) => {
+        const city = event.target.value;
+        setPosition(cities[city]);
+    };
+
     console.log("Charging Stations:", chargingStations);
     console.log("Parkings:", parkings_zones );
 
     return (
         <>
             <div style={{ padding: '10px' }}>
-                {/* Placeholder for any additional UI controls like a city selector */}
+                <select onChange={handleCityChange} defaultValue="Stockholm">
+                    {Object.keys(cities).map(city => (
+                        <option key={city} value={city}>{city}</option>
+                    ))}
+                </select>
             </div>
             <MapContainer
                 center={position}
@@ -100,9 +115,17 @@ const MapRender = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <MapMarkers bikes={bikes} chargingStations={chargingStations} parkings_zones={parkings_zones} />
+                <ChangeMapView center={position} />
             </MapContainer>
         </>
     );
 }
+
+const ChangeMapView = ({ center }) => {
+    const map = useMap(); // Hook to access the map instance
+    map.setView(center, map.getZoom());
+
+    return null; // Component does not render anything
+};
 
 export default MapRender;
