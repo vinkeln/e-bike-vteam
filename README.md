@@ -7,6 +7,11 @@ Testerna är skrivna med [Mocha](https://mochajs.org/) som testframework och anv
 
 ---
 
+## Badges
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/<vinkeln>/<e-bike-vteam>/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/<vinkeln>/<e-bike-vteam>/?branch=main)
+[![Build Status](https://scrutinizer-ci.com/g/<vinkeln>/<e-bike-vteam>/badges/build.png?b=main)](https://scrutinizer-ci.com/g/<vinkeln>/<e-bike-vteam>/build-status/main)
+
+
 ## Syfte med tester
 
 ### 1. `cities.test.js`
@@ -94,6 +99,8 @@ Testerna är skrivna med [Mocha](https://mochajs.org/) som testframework och anv
    ```bash
    npm test
    
+
+  
 
 Detta kommando använder mocha, som är specificerat i package.json.
 

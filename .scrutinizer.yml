@@ -1,10 +1,14 @@
 tools:
-    eslint:
-        config:
-            extends: "react-app" # Använder ESLint-konfigurationen som skapades av Create React App
+    javascript_coverage: true
+        eslint:
+            config:
+                extends: "react-app" # Använder ESLint-konfigurationen som skapades av Create React App
 
 
 build:
+    coverage:
+        file: coverage/lcov.info  # ange rätt täckningsrapportfil
+        format: lcov  # Ange formatet för täckningsrapporten
     environment:
         node:
             version: "18"  # Node.js
