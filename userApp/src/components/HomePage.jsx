@@ -8,16 +8,17 @@ const Home = () => {
 
     return (
         <div>
-            <h1>Scooter Rental Service</h1>
+            <h1>Scooter Rental Service App</h1>
             <p>
                 Welcome to our e-bike rental application! We are committed to providing a sustainable and eco-friendly way to explore your city.
             </p>
-            <button onClick={() => navigate('/register')}>Create Account</button>
-            <button onClick={() => navigate('/login')}>Login</button>
-        
-            <p onClick={() => navigate('/about')}>
-                <FontAwesomeIcon icon={faQuestionCircle} /> About
-            </p>
+            <div className="button-container">
+                <button onClick={() => navigate('/register')}>Create Account</button>
+                <button onClick={() => navigate('/login')}>Login</button>
+                <button onClick={() => navigate('/about')}>
+                    <FontAwesomeIcon icon={faQuestionCircle} /> About Us!
+                </button>
+            </div>
         </div>
     );
 };
