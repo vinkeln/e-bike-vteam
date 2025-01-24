@@ -98,9 +98,6 @@ Testerna är skrivna med [Mocha](https://mochajs.org/) som testframework och anv
 2. **Köra testerna**
    ```bash
    npm test
-   
-
-  
-
+```
 Detta kommando använder mocha, som är specificerat i package.json.
 
