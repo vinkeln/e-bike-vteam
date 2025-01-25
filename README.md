@@ -67,7 +67,7 @@ cd scooter-rental
 ```
 2.Installera beroenden:
 ```bash
-npm start
+npm install
 ```
 3.Starta front-servern:
 ```bash
