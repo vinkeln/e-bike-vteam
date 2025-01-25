@@ -1,5 +1,10 @@
 const { FlatCompat } = require('@eslint/eslintrc');
-const compat = new FlatCompat();
+const { ESLint } = require('eslint');
+
+const compat = new FlatCompat({
+    baseDirectory: __dirname, // Lägg till basmappen för att hitta konfigurationer
+    recommendedConfig: ESLint.recommended, // Lägg till rekommenderad konfiguration
+});
 
 module.exports = [
     {
@@ -7,6 +12,7 @@ module.exports = [
         languageOptions: {
             ecmaVersion: 12,
             sourceType: 'module',
+            parser: '@typescript-eslint/parser',
             parserOptions: {
                 ecmaFeatures: {
                     jsx: true,
