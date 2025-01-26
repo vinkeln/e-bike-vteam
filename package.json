@@ -10,15 +10,10 @@
   "author": "LAG KAJl",
   "license": "ISC",
   "dependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.21.0",
-    "@typescript-eslint/parser": "^8.21.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.0",
     "debug": "^4.3.1",
     "dotenv": "^16.4.7",
-    "eslint": "^9.18.0",
-    "eslint-plugin-react": "^7.37.4",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
     "glob": "^9.0.0",
@@ -36,8 +31,13 @@
     "supertest": "^7.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
     "chai": "^4.3.6",
     "chai-http": "^4.4.0",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react": "^7.37.4",
     "mocha": "^11.0.1",
     "sinon": "^19.0.2"
   }

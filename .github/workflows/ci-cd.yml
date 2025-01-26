@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Installera Node.js version 20
+          node-version: '18' # Installera Node.js version 18
 
       # 3. Clear npm cache
       - name: Clear npm cache
@@ -49,7 +49,7 @@ jobs:
 
       # 9. Lint code
       - name: Run ESLint
-        run: npx eslint .
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
 
       # 10. Upload test coverage (optional)
       - name: Upload test coverage
