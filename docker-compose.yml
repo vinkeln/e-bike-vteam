@@ -1,0 +1,86 @@
+version: "3.9"
+
+networks:
+  appnetwork: # Skapar ett nätverk där alla tjänster ansluts
+    driver: bridge
+
+services:
+  server:
+    image: servertest
+    container_name: server
+    ports:
+      - "3000:3000" # Exponerar serverns port 3000
+    networks:
+      - appnetwork
+    restart: always # Startar om containern om den kraschar
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+
+  admin:
+    image: adminsidatest
+    container_name: admin
+    ports:
+      - "3001:3001" # Exponerar adminsidan på port 3001
+    networks:
+      - appnetwork
+    restart: always
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+
+  user:
+    image: usersidatest
+    container_name: user
+    ports:
+      - "3002:3002" # Exponerar användarsidan på port 3002
+    networks:
+      - appnetwork
+    restart: always
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+
+  userapp:
+    image: userapptest
+    container_name: userapp
+    ports:
+      - "3003:3003" # Exponerar användarappen på port 3003
+    networks:
+      - appnetwork
+    restart: always
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+
+  mariadb:
+    image: mariatest
+    container_name: mariadb
+    ports:
+      - "3306:3306" # Exponerar MariaDB på port 3306
+    networks:
+      - appnetwork
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_DATABASE: elsparkcykel
+      MYSQL_USER: dbadm
+      MYSQL_PASSWORD: P@ssw0rd
+    volumes:
+      - mariadb-data:/var/lib/mysql # Persistent lagring
+      - ./config/db/my.cnf:/etc/mysql/my.cnf # Anpassad konfiguration
+
+volumes:
+  mariadb-data: # Skapar ett volume för MariaDB-data

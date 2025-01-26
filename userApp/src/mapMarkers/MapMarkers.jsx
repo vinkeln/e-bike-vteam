@@ -5,6 +5,7 @@ import parkingIconUrl from '../icons/parking.png';
 import stationIconUrl from '../icons/station.png';
 import availableBike from '../icons/availablebike.png';
 import L from 'leaflet';
+import QRScannerButton from '../components/QRScannerButton';
 
 
 const availableBikeIcon = new L.icon({
@@ -27,15 +28,22 @@ const parkingIcon = new L.Icon({
 
 // Component to render bikes
 export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
+    const userId = localStorage.getItem('user_id');
+
     return (
         <>
             {Object.values(bikes).map(bike => (
-                <Marker key={bike.id} position={[bike.latitude, bike.longitude]} icon={availableBikeIcon}>
+                <Marker key={bike.scooter_id} position={[bike.current_latitude, bike.current_longitude]} icon={availableBikeIcon}>
                     <Popup>
-                        Bike ID: {bike.id}<br />
+                        Bike ID: {bike.scooter_id}<br />
                         Status: {bike.status}<br />
                         Battery level: {bike.batteryLevel ? `${bike.batteryLevel.toFixed(2)}%` : 'N/A'}<br />
-                        Speed: {bike.speed ? `${bike.speed} km/h` : 'N/A'}
+                        Speed: {bike.speed ? `${bike.speed} km/h` : 'N/A'}<br />
+                        <QRScannerButton
+                            userId={userId}
+                            scooterId={bike.bike_serial_number}
+                            startLocationId={bike.current_location_id}
+                            cost={"15"} />
                     </Popup>
                 </Marker>
             ))}

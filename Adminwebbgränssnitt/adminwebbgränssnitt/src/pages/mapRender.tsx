@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import auth from "../../modules/auths.ts";
@@ -9,11 +9,10 @@ import { useNavigate } from "react-router-dom";
 
 import {
   MapMarkers,
-  Bike,
   ChargingStation,
   ParkingZone,
 } from "../components/MapMarkers.tsx";
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 
 const socket = io("http://localhost:3000");
 
@@ -33,22 +32,7 @@ const ChargingStationsMap = () => {
   }, []);
 
   const [currentCity, setCurrentCity] = useState("Stockholm");
-  const [stations, setStations] = useState<ChargingStation[]>([
-    {
-      station_id: 3,
-      latitude: 59.3273,
-      longitude: 18.0666,
-      total_ports: 10,
-      available_ports: 5,
-    },
-    {
-      station_id: 4,
-      latitude: 59.3273,
-      longitude: 59.3073,
-      total_ports: 10,
-      available_ports: 10,
-    }, // Hårdkodad station
-  ]);
+  const [stations, setStations] = useState<ChargingStation[]>([]);
 
   const [bikeData, setBikeData] = useState({}); // Dict för cykeldata
 
@@ -61,12 +45,12 @@ const ChargingStationsMap = () => {
       capacity: 25,
     },
   ]);
-  const defaultCenter = [59.3293, 18.0686];
+  // const defaultCenter = [59.3293, 18.0686];
 
   useEffect(() => {
     fetchStations();
     fetchParkingZones();
-    socket.on("bikeNotification", (data) => {
+    socket.on("bikeNotification", (data: any) => {
       console.log("Received data:", data);
 
       // Uppdatera state baserat på bikeSerialNumber
@@ -85,9 +69,11 @@ const ChargingStationsMap = () => {
       const response = await chargingStations.fetchStations(); // Use fetchStations from chargingStations module
       console.log("Fetched Stations:", response);
       if (response.chargingStations && response.chargingStations.length > 0) {
+        // @ts-ignore
         setStations(response.chargingStations); // Update state with stations from API
       } else {
         console.error("No stations found");
+        setStations([]);
       }
     } catch (error) {
       console.error("Failed to fetch stations:", error);
@@ -98,7 +84,10 @@ const ChargingStationsMap = () => {
   const fetchParkingZones = async () => {
     try {
       const response = await parkings.getparkings(); // Use getparkings from parkings module
+      // @ts-ignore
       if (response.parkings_zones && response.parkings_zones.length > 0) {
+        // @ts-ignore
+
         setParkingZones(response.parkings_zones);
       } else {
         console.error("No parking zones found");
@@ -108,13 +97,15 @@ const ChargingStationsMap = () => {
       setParkingZones([]);
     }
   };
-
+  // @ts-ignore
   const handleCityChange = (event) => {
     setCurrentCity(event.target.value);
   };
 
+  // @ts-ignore
   function SetCenter({ city }) {
     const map = useMap();
+    // @ts-ignore
     map.setView(cities[city], map.getZoom());
     return null;
   }
@@ -129,6 +120,7 @@ const ChargingStationsMap = () => {
         </select>
       </div>
       <MapContainer
+        // @ts-ignore
         center={cities[currentCity]}
         zoom={13}
         style={{ height: "80vh", width: "80%" }}

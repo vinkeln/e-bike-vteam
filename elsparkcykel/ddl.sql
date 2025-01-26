@@ -29,7 +29,7 @@ CREATE TABLE `location` (
   `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `latitude` decimal(10,8) NOT NULL,
   `longitude` decimal(11,8) NOT NULL,
-  `type` enum('laddstation', 'parkeringszon', 'resa') NOT NULL,
+  `type` enum('laddstation', 'parkeringszon', 'resa','freepark') NOT NULL,
   PRIMARY KEY (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -135,3 +135,6 @@ CREATE TABLE `warnings` (
   FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`scooter_id`),
   FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `location` (`location_id`, `latitude`, `longitude`, `type`)
+VALUES (0, 0.00000000, 0.00000000, 'freepark');

@@ -13,8 +13,8 @@ const socket = io("http://localhost:3000");
 const MapRender = () => {
     const [position, setPosition] = useState([59.3293, 18.0686]); // Default to Stockholm coordinates
     const [bikes, setBikes] = useState({
-        1: { id: 1, latitude: 59.3293, longitude: 18.0686, status: 'ledig', batteryLevel: 85, speed: 12.5 },
-        2: { id: 2, latitude: 57.7089, longitude: 11.9746, status: 'upptagen', batteryLevel: 65, speed: 10.0 }
+        1: { scooter_id: 1, current_latitude: 59.3293, current_longitude: 18.0686, status: 'ledig', batteryLevel: 85, speed: 12.5 },
+        2: { scooter_id: 2, current_latitude: 57.7089, current_longitude: 11.9746, status: 'upptagen', batteryLevel: 65, speed: 10.0 }
     });
     const [chargingStations, setChargingStations] = useState([]);
     const [parkings_zones, setParkingZones] = useState([]);
@@ -25,7 +25,7 @@ const MapRender = () => {
             if (data.Message === 'Success' && data.bikes) {
                 const newBikes = {};
                 data.bikes.forEach(bike => {
-                    newBikes[bike.bike.id] = bike;
+                    newBikes[bike.scooter_id] = bike;
                 });
                 setBikes(newBikes);
             }
@@ -47,25 +47,26 @@ const MapRender = () => {
         });
 
         // Fetch parking zones
-        parkingModule.getparkings().then(response => {
+        parkingModule.getparkings()
+        .then(response => {
+        if (response && response.parkings_zones && response.parkings_zones.length > 0) {
             console.log("Fetched Parking Zones:", response.parkings_zones);
-            const parkingsZones = response?.parkings_zones; // Använd optional chaining här
-            if (response.parkings_zones && response.parkings_zones.length > 0) {
-                setParkingZones(response.parkings_zones);
-            } else {
-                console.error('Failed to load parking zones:', response.message);
-                setParkingZones([]);
-            }
-        }).catch(error => {
-            console.error('Error fetching parking zones:', error);
+            setParkingZones(response.parkings_zones);
+        } else {
+            console.error('Failed to load parking zones:', response?.message || 'No parking zones found');
             setParkingZones([]);
+        }
+        })
+        .catch(error => {
+        console.error('Error fetching parking zones:', error);
+        setParkingZones([]);
         });
 
         // Setup socket listeners
         socket.on("updateBikes", (bike) => {
             setBikes(prevBikes => {
                 const updatedBikes = {...prevBikes};
-                updatedBikes[bike.id] = bike;
+                updatedBikes[bike.scooter_id] = bike;
                 return updatedBikes;
             });
         });

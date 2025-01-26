@@ -25,7 +25,16 @@ async function addTravel(userId, scooterId, startLocationId, startTime, cost) {
 
     // Lägg till en ny resa
     let sql = `INSERT INTO ride (user_id, scooter_id, start_location_id, start_time, cost) VALUES (?, ?, ?, ?, ?)`;
-    await db.query(sql, [userId, scooterId, startLocationId, startTime, cost]);
+    const [result] = await db.query(sql, [
+      userId,
+      scooterId,
+      startLocationId,
+      startTime,
+      cost,
+    ]);
+
+    // Hämta det genererade ride_id
+    const rideId = result.insertId;
 
     // Uppdatera scooterns status till "upptagen"
     let updateScooterSql = `UPDATE scooter SET status = "upptagen" WHERE scooter_id = ?`;
@@ -34,7 +43,7 @@ async function addTravel(userId, scooterId, startLocationId, startTime, cost) {
     // Commit transaktionen
     await db.commit();
 
-    return userId; // Returnera userId för vidare användning om det behövs
+    return rideId; // Returnera det genererade ride_id
   } catch (error) {
     // Om något går fel, rulla tillbaka transaktionen
     await db.rollback();

@@ -72,7 +72,7 @@ app.use((req, res, next) => {
   if (!apiKey || apiKey !== process.env.API_KEY) {
     return res.status(403).json({ error: "Forbidden: Invalid API key" }); // Return an error if invalid
   }
-
+  console.log(process.env.API_KEY, "hejhejhejhej");
   next(); // API key is valid, move to the next middleware
 });
 

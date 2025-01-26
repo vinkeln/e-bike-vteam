@@ -31,6 +31,7 @@ const chargingStations = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      // @ts-ignore
       const chargingStations = data.chargingStations.map(station => ({
         ...station,
         latitude: parseFloat(station.latitude),

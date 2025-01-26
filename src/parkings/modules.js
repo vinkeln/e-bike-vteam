@@ -225,6 +225,62 @@ async function getParkBycity(cityId) {
   }
 }
 
+async function locationExists(lat, lng) {
+  let db = await mysql.createConnection(config); // Skapa en databasanslutning
+  try {
+    // Uppdaterad SQL-fråga för att kontrollera om platsen finns och hämta location_id
+    let sql = `
+      SELECT location_id
+      FROM location
+      WHERE latitude = ? AND longitude = ?;
+    `;
+
+    let [rows] = await db.query(sql, [lat, lng]); // Kör frågan med latitude och longitude som parametrar
+
+    if (rows.length > 0) {
+      // Om en matchande rad hittades, returnera true och location_id
+      return { exists: true, locationId: rows[0].location_id };
+    } else {
+      // Om ingen matchande rad hittades, returnera false
+      return { exists: false, locationId: 1 };
+    }
+  } catch (error) {
+    console.error("Error in locationExists:", error.message);
+    throw error; // Skicka vidare felet
+  } finally {
+    if (db) await db.end(); // Stäng anslutningen
+  }
+}
+
+async function getScooterLocationById(scooterId) {
+  let db = await mysql.createConnection(config); // Skapa en databasanslutning
+  try {
+    // Steg 1: Hämta latitude och longitude baserat på scooter_id
+    let locationQuery = `
+      SELECT current_latitude AS latitude, current_longitude AS longitude
+      FROM scooter  
+      WHERE bike_serial_number = ?;
+    `;
+    let [locationResult] = await db.query(locationQuery, [scooterId]);
+
+    if (locationResult.length === 0) {
+      throw new Error(`Location for scooter with ID ${scooterId} not found.`);
+    }
+
+    const { latitude, longitude } = locationResult[0];
+
+    // Steg 2: Kontrollera om platsen finns i tabellen `location`
+    const { exists, locationId } = await locationExists(latitude, longitude);
+
+    return { exists, locationId }; // Returnera resultatet från locationExists
+  } catch (error) {
+    console.error("Error in getScooterLocationById:", error.message);
+    throw error; // Skicka vidare felet
+  } finally {
+    if (db) await db.end(); // Stäng anslutningen
+  }
+}
+
 module.exports = {
   getParkings,
   addPark,
@@ -233,4 +289,5 @@ module.exports = {
   checkParkings,
   updatePark,
   getParkBycity,
+  getScooterLocationById,
 };

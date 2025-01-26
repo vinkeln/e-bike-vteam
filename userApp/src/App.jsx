@@ -8,6 +8,8 @@ import UserProfile from './components/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import About from './components/About';
 import MapRender from './Map/MapRender';
+import TravelTimer from './components/TravelTimer';
+import QRScanner from './components/QRScanner';
 import './App.css';
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route path="/profile" element={
           <ProtectedRoute>
             <UserProfile />
@@ -26,6 +29,8 @@ function App() {
         } />
           <Route path="/about" element={<About />} />
           <Route path="/mapRender" element={<MapRender />} />
+          <Route path="/travel-timer" element={<TravelTimer />} />
+          <Route path="/QRScanner" element={<QRScanner />} />
         </Routes>
       </div>
     </Router>

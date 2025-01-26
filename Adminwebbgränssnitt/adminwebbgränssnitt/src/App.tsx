@@ -12,7 +12,6 @@ import { AddCityForm } from "./pages/AddCityForm";
 import AddParking from "./components/AddParking";
 import ChargingStationForm from "./pages/ChargingStationForm";
 import UserTravelsPage from "./pages/UserTravelsPage";
-import SocketTest from "./pages/SocketTest";
 function App() {
   return (
     <>
@@ -30,7 +29,6 @@ function App() {
         <Route path="/addparking" element={<AddParking />} />
         <Route path="/addstation" element={<ChargingStationForm />} />
         <Route path="/user-travels/:userId" element={<UserTravelsPage />} />
-        <Route path="/sockettest" element={<SocketTest />} />
       </Routes>
     </>
   );

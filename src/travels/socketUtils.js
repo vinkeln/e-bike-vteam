@@ -4,9 +4,14 @@ const ioClient = require("socket.io-client");
 const socket = ioClient("http://localhost:3000");
 
 // Kontrollera cykelns tillgänglighet
-function checkScooterAvailability(scooterId, userId, socketEvent) {
+function checkScooterAvailability(
+  scooterId,
+  userId,
+  socketEvent,
+  bikeLocationId
+) {
   return new Promise((resolve) => {
-    socket.emit(socketEvent, { scooterId, userId });
+    socket.emit(socketEvent, { scooterId, userId, bikeLocationId });
 
     // Lyssna efter svar från servern
     socket.once("rideResponse", (response) => {

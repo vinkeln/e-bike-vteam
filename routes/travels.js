@@ -5,6 +5,7 @@ const checkAdmin = require("../middleware/check-admin.js"); // Middleware för a
 const travelsModules = require("../src/travels/modules.js"); // Moduler för databashantering relaterade till resor
 const chargingstationsModules = require("../src/chargingstations/modules.js"); // Moduler för databashantering relaterade till resor
 const { checkScooterAvailability } = require("../src/travels/socketUtils");
+const parkingssModules = require("../src/parkings/modules.js"); // Moduler för databashantering relaterade till resor
 
 // Get a list over all the travels in the system.
 router.get("/", checkAuth, checkAdmin, async (req, res) => {
@@ -95,7 +96,8 @@ router.put("/", checkAuth, async (req, res) => {
       const socketResponse = await checkScooterAvailability(
         scooter_id,
         user_id,
-        "stopRide"
+        "stopRide",
+        end_location_id
       );
       if (!socketResponse.available) {
         return res
@@ -103,6 +105,13 @@ router.put("/", checkAuth, async (req, res) => {
           .json({ error: "Scooter is not available or not connected" });
       }
     }
+    const parkings = await parkingssModules.getScooterLocationById(scooter_id);
+    console.log(parkings.exists);
+    if (!parkings.exists) {
+      cost = parseInt(cost, 10) + 10; // Lägg till 10 om platsen inte finns
+      end_location_id = parkings.locationId;
+    }
+    end_location_id = parkings.locationId;
     await travelsModules.updateTravel(end_time, cost, ride_id, end_location_id);
 
     res.status(200).json({ message: "Trip has been updated!" });

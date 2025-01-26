@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const bikeController = require("../src/controller/bikeController.js");
 const { notifyAdmins, notifyCustomer } = require("../src/notify/notify");
+const parkingssModules = require("../src/parkings/modules.js"); // Moduler för databashantering relaterade till resor
 
 function initializeSocketHandlers(server) {
   const io = new Server(server, {
@@ -63,9 +64,45 @@ function initializeSocketHandlers(server) {
       }
     });
 
+    socket.on("checkScooterAvailability", async (data) => {
+      const { scooterId } = data;
+      console.log(`Kollar tillgänglighet för cykel ${scooterId}`);
+
+      try {
+        // Hämta cykelns aktuella status (om den är upptagen eller inte) från getBusyBike
+        const scooter = await bikeController.getBusyBike(scooterId);
+
+        // Kontrollera om cykeln är ansluten och om den är upptagen
+        const isScooterConnected = connectedScooters[scooterId];
+
+        // Anropa funktionen för att kontrollera om cykeln finns på en giltig plats
+        const locationExists = await parkingssModules.getScooterLocationById(
+          scooterId
+        );
+
+        if (isScooterConnected && scooter && locationExists.exists) {
+          // Skicka tillgänglighetsstatus till frontend (true om cykeln är tillgänglig för uthyrning)
+          socket.emit("rideResponse", { available: true, scooterId });
+          console.log(
+            `Cykel ${scooterId} är tillgänglig och finns på en giltig plats.`
+          );
+        } else {
+          // Cykeln är antingen inte ansluten, upptagen eller på en ogiltig plats
+          console.log(`Cykel ${scooterId} är inte tillgänglig.`);
+          socket.emit("rideResponse", { available: false, scooterId });
+        }
+      } catch (error) {
+        console.error(
+          "Fel vid kontroll av cykelns tillgänglighet:",
+          error.message
+        );
+        socket.emit("rideResponse", { available: false, scooterId });
+      }
+    });
+
     // Stop a bike
     socket.on("stopRide", async (data) => {
-      const { scooterId, userId } = data;
+      const { scooterId, userId, bikeLocationId } = data;
       console.log(`Kund ${userId} vill avsluta resa med cykel ${scooterId}`);
       const scooter = await bikeController.getBusyBike(scooterId);
       // Kontrollera om cykeln är ansluten
@@ -73,7 +110,7 @@ function initializeSocketHandlers(server) {
         const scooterSocketId = connectedScooters[scooterId];
 
         // Skicka ett meddelande till cykeln att starta en resa
-        io.to(scooterSocketId).emit("stopRide", { userId });
+        io.to(scooterSocketId).emit("stopRide", { userId, bikeLocationId });
         console.log(`Meddelande skickat till cykel ${scooterId}`);
 
         // Skicka tillgänglighetssvar till frontend
