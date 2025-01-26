@@ -1,12 +1,11 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const compat = new FlatCompat({
-    recommendedConfig: require('eslint/conf/eslint-recommended'), // Add this line
-    baseDirectory: __dirname, // Base directory to locate configurations
+    baseDirectory: __dirname, // Endast basmappen behövs
 });
 
 module.exports = [
     {
-        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+        files: ['**/*.{js,jsx,ts,tsx}'], // Specifiera filtyperna direkt här
         languageOptions: {
             ecmaVersion: 12,
             sourceType: 'module',
