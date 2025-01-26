@@ -1,6 +1,6 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const compat = new FlatCompat({
-    recommendedConfig: require('eslint/conf/eslint-recommended'),
+    //recommendedConfig: require('eslint/conf/eslint-recommended'),
     baseDirectory: __dirname, // Basmappen för att hitta konfigurationer
 });
 
