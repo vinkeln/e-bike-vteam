@@ -19,8 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --config eslint.config.js",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --config eslint.config.js --debug",
+    "lint:fix": "eslint . --fix --config eslint.config.js"
   },
   "eslintConfig": {
     "extends": [
@@ -43,7 +43,9 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@eslint/js": "^9.19.0",
     "eslint": "^9.19.0",
-    "eslint-plugin-react": "^7.37.4"
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0"
   }
 }
