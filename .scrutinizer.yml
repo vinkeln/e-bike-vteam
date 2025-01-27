@@ -1,44 +1,35 @@
-filter:
-    paths:
-        - "**/*"  # Inkludera alla filer
-
-tools:
-    javascript_coverage: true
-    eslint:
-        config:
-            extends: "react-app" # Använder ESLint-konfigurationen som skapades av Create React App
-    sql_lint:
-        enabled: true  # Aktivera SQL-lint
-    sql_query_analyzer:
-        enabled: true  # Aktivera SQL-query-analysatorn
-
 build:
-    coverage:
-        file: coverage/lcov.info  # ange rätt täckningsrapportfil
-        format: lcov  # Ange formatet för täckningsrapporten
     environment:
         node:
-            version: "18"  # Node.js
-    branches:
-        only: all # Pushar på alla grenar
-        
+            version: "18"  # Ange rätt Node.js-version
+    dependencies:
+        override:
+            - npm install  # Installerar beroenden
+    tests:
+        override:
+            - npm test      # Kör dina tester
+
+tools:
+    eslint:
+        config:
+            extends: "eslint:recommended"  # ESLint-konfiguration
+    javascript_coverage: true  # Analyserar kodtäckning
+    sql_lint:
+        enabled: true           # Aktiverar SQL-lint
+    sql_query_analyzer:
+        enabled: true           # Analyserar SQL-frågor
+
+filter:
+    paths:
+        - "**/*"  # Inkludera alla filer i analysen
+
 checks:
-    javascript: 
+    javascript:
         code_rating: true
+        complexity: true
         unused_variables: true
         no_console: true
-        complexity: true  # Kontrollera kodkomplexitet
+
     sql:
-        sql_injection: true  # SQL-injection analys
-        unused_queries: true  # Identifiera oanvända SQL-frågor
-
-# Testkonfiguration
-tests:
-    override:
-        - "npm install"
-        - "npm test"
-
-# Aktivera kodkvalitetsbetyg (code rating)
-code_quality:
-    enabled: true
-
+        sql_injection: true  # Kontrollera mot SQL-injection
+        unused_queries: true
