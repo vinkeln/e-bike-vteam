@@ -1,5 +1,4 @@
 build:
-    timeout: 300  # Timeout på 5 minuter (300 sekunder)
     environment:
         node:
             version: "18"
