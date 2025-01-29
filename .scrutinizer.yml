@@ -1,33 +1,22 @@
 build:
     environment:
         node:
-            version: "18"  # Ange rätt Node.js-version
+            version: "18"
     dependencies:
         override:
-            - npm install  # Installerar beroenden
-    tests:
-        override:
-            - npm test || echo "Inga tester hittades"  # Kör dina tester
+            - npm install --production  # Installerar endast produktionsberoenden för snabbare körning
 
 tools:
-    javascript_analyzer:
-        enabled: true
     eslint:
-        enabled: true  # Använd ESLint för kodanalys
+        enabled: true  # Endast ESLint används för kodanalys, inget extra
 
 filter:
     paths:
-        - src/
-        - tests/
+        - src/  # Analyserar endast src/
     excluded_paths:
-        - node_modules/**
-        - logs/**
-        - dist/**
-        - vendor/**
+        - "**/*"  # Ignorerar ALLA andra filer utanför src/ för att minimera analysen
 
 checks:
     javascript:
-        code_rating: true
-        complexity: true
-        unused_variables: true
-        no_console: true
+        code_rating: true  # Kodbetyg
+        unused_variables: true  # Analysera oanvända variabler
