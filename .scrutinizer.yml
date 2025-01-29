@@ -10,13 +10,10 @@ build:
             - npm test || echo "Inga tester hittades"  # Kör dina tester
 
 tools:
-    javascript:
+    javascript_analyzer:
         enabled: true
-    javascript_coverage: true  # Analyserar kodtäckning
-    sql_lint:
-        enabled: true           # Aktiverar SQL-lint
-    sql_query_analyzer:
-        enabled: true           # Analyserar SQL-frågor
+    eslint:
+        enabled: true  # Använd ESLint för kodanalys
 
 filter:
     paths:
