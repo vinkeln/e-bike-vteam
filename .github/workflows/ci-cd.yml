@@ -47,8 +47,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-
-      # 10. Upload test coverage (optional)
+      # 9. Upload test coverage (optional)
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:

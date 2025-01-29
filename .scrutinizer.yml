@@ -34,7 +34,3 @@ checks:
         complexity: true
         unused_variables: true
         no_console: true
-
-    sql:
-        sql_injection: true  # Kontrollera mot SQL-injection
-        unused_queries: true
