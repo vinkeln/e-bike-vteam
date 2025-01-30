@@ -7,6 +7,7 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 
 [![Code Coverage](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
 
 ## Funktioner
 - **Frontend:**
