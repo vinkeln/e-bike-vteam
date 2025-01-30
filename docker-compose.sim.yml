@@ -1,7 +1,6 @@
 # Definiera externa nätverk
 networks:
   vteam:
-    external: true  # Anger att vi använder det externa nätverket som skapades i docker-compose.prod.yml
 
 services:
   mariadb:
