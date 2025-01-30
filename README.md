@@ -5,6 +5,8 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 
 ---
 
+[![Code Coverage](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
+
 ## Funktioner
 - **Frontend:**
   - Interaktiv karta för scooters och laddstationer.
