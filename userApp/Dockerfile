@@ -1,23 +1,23 @@
-# Använd den officiella Node.js-bilden som bas
-FROM node:18
+# 1. Använd en Node-bild som bas
+FROM node:18-alpine
 
-# Sätt arbetskatalogen i containern
+# 2. Ställ in arbetskatalog
 WORKDIR /app
 
-# Kopiera package.json och package-lock.json (eller yarn.lock om du använder yarn)
+# 3. Kopiera package.json och package-lock.json till arbetskatalogen
 COPY package*.json ./
 
-# Installera alla beroenden
+# 4. Installera beroenden
 RUN npm install
 
-# Kopiera alla filer från projektet till containern
+# 5. Kopiera över resten av koden
 COPY . .
 
-# Bygg applikationen
+# 6. Bygg projektet
 RUN npm run build
 
-# Exponera porten som appen kör på (Vite använder vanligtvis port 5173 i utveckling)
-EXPOSE 3003
+# 7. Exponera en port för servern
+EXPOSE 8081
 
-# Starta appen (det här kommer att köra `vite preview` för att köra en preview av byggd app)
+# 8. Starta Vite i preview-läge
 CMD ["npm", "run", "preview"]

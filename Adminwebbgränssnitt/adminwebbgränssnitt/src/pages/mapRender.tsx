@@ -45,24 +45,47 @@ const ChargingStationsMap = () => {
       capacity: 25,
     },
   ]);
-  // const defaultCenter = [59.3293, 18.0686];
 
+  // const defaultCenter = [59.3293, 18.0686];
   useEffect(() => {
     fetchStations();
     fetchParkingZones();
+
     socket.on("bikeNotification", (data: any) => {
       console.log("Received data:", data);
 
-      // Uppdatera state baserat på bikeSerialNumber
-      setBikeData((prev) => ({
-        ...prev,
-        [data.bikeSerialNumber]: data, // Uppdatera eller lägg till cykeln
-      }));
+      if (data && data.length > 0) {
+        data.forEach((bike: any) => {
+          setBikeData((prev) => ({
+            ...prev,
+            [bike.bikeSerialNumber]: bike, // Uppdatera eller lägg till cykeln
+          }));
+        });
+      }
     });
+
     return () => {
       socket.off("bikeNotification");
     };
   }, []);
+
+  // useEffect(() => {
+  //   fetchStations();
+  //   fetchParkingZones();
+  //   socket.on("bikeNotification", (data: any) => {
+  //     console.log("Received data:", data);
+
+  //     // Uppdatera state baserat på bikeSerialNumber
+  //     setBikeData(
+  //       (prev) => ({
+  //       ...prev,
+  //       [data.bikeSerialNumber]: data, // Uppdatera eller lägg till cykeln
+  //     }));
+  //   });
+  //   return () => {
+  //     socket.off("bikeNotification");
+  //   };
+  // }, []);
 
   const fetchStations = async () => {
     try {

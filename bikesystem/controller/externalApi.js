@@ -2,7 +2,7 @@ const fetch = require("node-fetch"); // Ensure 'node-fetch' is installed
 
 // Function to update bike status via external API
 async function updateBikeStatus(bikeId, newStatus, apiKey) {
-  const apiUrl = `http://localhost:3000/v1/bikes/status/${bikeId}`;
+  const apiUrl = `http://server:3000/v1/bikes/status/${bikeId}`;
 
   try {
     const response = await fetch(apiUrl, {
@@ -43,8 +43,8 @@ function handleChargingStatus(bikeId, isCharging) {
   }
 }
 
-async function addBikeToDatabase(bikeData) {
-  const url = "http://localhost:3000/v1/bikes";
+async function addBikeToDatabase(bikeData, server) {
+  const url = `http://${server}:3000/v1/bikes`;
   try {
     const response = await fetch(url, {
       method: "POST",

@@ -28,8 +28,8 @@ const parkingIcon = new L.Icon({
 
 // Component to render bikes
 export const MapMarkers = ({ bikes, chargingStations, parkings_zones }) => {
-    const userId = localStorage.getItem('user_id');
-
+    const userId = localStorage.getItem('userId');
+    
     return (
         <>
             {Object.values(bikes).map(bike => (

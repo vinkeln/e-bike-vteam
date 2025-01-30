@@ -24,7 +24,7 @@ const Login = () => {
             }
 
             // console.log("userId", response.data.user_id);
-            // localStorage.setItem("userId", response.data.user_id);
+            localStorage.setItem("userId", response.data.user_id);
             localStorage.setItem("token", response.data.token);
             console.log("Login successful. Token:", response.data.token);
             navigate("/profile");

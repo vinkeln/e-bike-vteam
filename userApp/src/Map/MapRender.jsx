@@ -108,7 +108,7 @@ const MapRender = () => {
             <MapContainer
                 center={position}
                 zoom={13}
-                style={{ height: '500px', width: '100%' }}
+                style={{ height: '500px', width: '50rem' }}
                 scrollWheelZoom={true}
             >
                 <TileLayer

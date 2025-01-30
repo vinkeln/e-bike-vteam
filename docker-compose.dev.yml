@@ -1,0 +1,73 @@
+networks:
+  vteam:
+    external: true
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: elsparkcykel
+      MYSQL_USER: dbadm
+      MYSQL_PASSWORD: P@ssw0rd
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+      - ./config/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      vteam:
+
+  server:
+    image: abedsandeed/server:1.0.0
+    container_name: "servertest2"
+    ports:
+      - "3000:3000"
+    env_file: 
+    - .env
+    environment:
+      DB_HOST: mariadb
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+    depends_on:
+      - mariadb
+    networks:
+      vteam:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/v1/bikes"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+  usersida:
+    image: abedsandeed/usersida:1.0.0
+    container_name: "usersida"
+    ports:
+      - "3002:3002"
+    networks:
+      vteam:
+    links:
+    - "server:servertest2"
+
+  adminsida:
+    image: abedsandeed/adminsida:1.0.0
+    container_name: "adminsida"
+    ports:
+      - "8080:8080"
+    networks:
+      vteam:
+    links:
+    - "server:servertest2"
+
+  userapp:
+    image: abedsandeed/userapp:1.0.0
+    container_name: "userapp"
+    ports:
+      - "8081:8081"
+    networks:
+      vteam:
+    links:
+    - "server:servertest2"

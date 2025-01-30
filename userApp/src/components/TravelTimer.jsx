@@ -20,7 +20,7 @@ const formatDate = (date) => {
 const TravelTimer = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const userId = localStorage.getItem('user_id');
+  const userId = localStorage.getItem('userId');
 
   const { startTime, rideId, scooterId, startLocationId } = location.state || {};
   const [elapsedTime, setElapsedTime] = useState(0);

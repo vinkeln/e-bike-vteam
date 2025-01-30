@@ -1,28 +1,23 @@
-# Använd en nyare Node.js-bild
-FROM node:18
+# 1. Använd en Node-bild som bas
+FROM node:18-alpine
 
-RUN apt update && \
-    apt install -y xsel
-
-# Sätt arbetskatalogen i containern
+# 2. Ställ in arbetskatalog
 WORKDIR /app
 
-# Kopiera package.json och package-lock.json
+# 3. Kopiera package.json och package-lock.json till arbetskatalogen
 COPY package*.json ./
 
-# Installera beroenden i containern
+# 4. Installera beroenden
 RUN npm install
 
-RUN npm install -g serve
-
-# Kopiera övrig källkod till containern
+# 5. Kopiera över resten av koden
 COPY . .
 
-# Bygg React-applikationen
+# 6. Bygg projektet
 RUN npm run build
 
-# Exponera port 3000
-EXPOSE 3001
+# 7. Exponera en port för servern
+EXPOSE 8080
 
-# Kör applikationen med `serve`
-CMD ["serve", "-s", "build", "-l", "3001"]
+# 8. Starta Vite i preview-läge
+CMD ["npm", "run", "preview"]

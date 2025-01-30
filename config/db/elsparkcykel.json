@@ -1,5 +1,5 @@
 {
-    "host": "Abed.local",
+    "host": "mariadb",
     "user": "dbadm",
     "password": "P@ssw0rd",
     "database": "elsparkcykel",

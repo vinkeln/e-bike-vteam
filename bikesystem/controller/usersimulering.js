@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 // URL till signup-endpoint
-const SIGNUP_URL = "http://localhost:3000/v1/user/signup";
+const SIGNUP_URL = "http://server:3000/v1/user/signup";
 
 // Funktion för att generera en slumpmässig e-postadress
 const generateRandomEmail = (index) => `user${index}@example.com`;
@@ -27,17 +27,35 @@ const createUser = async (index) => {
   }
 };
 
-// Skapa 1000 användare
-const createMultipleUsers = async () => {
+// Funktion för att skapa användare i batcher
+const createUsersInBatches = async (userCount, batchSize = 100) => {
   const userPromises = [];
-  for (let i = 1; i <= 10; i++) {
+
+  for (let i = 1; i <= userCount; i++) {
     userPromises.push(createUser(i));
+
+    // När batchen är full (batchSize användare), kör batchen
+    if (i % batchSize === 0 || i === userCount) {
+      // Vänta tills alla användare i batchen är skapade
+      await Promise.all(userPromises);
+      console.log(`Batch ${Math.ceil(i / batchSize)} created.`);
+
+      // Reset userPromises för nästa batch
+      userPromises.length = 0;
+
+      // Vänta en liten stund innan nästa batch skickas för att minska belastningen
+      await delay(4000); // Vänta 1 sekund mellan batcher
+    }
   }
 
-  // Vänta tills alla förfrågningar är klara
-  await Promise.all(userPromises);
   console.log("All users created.");
 };
 
-// Kör funktionen
-createMultipleUsers();
+// Funktion för att skapa en fördröjning
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Skapa 1000 användare
+// createUsersInBatches(3000);
+module.exports = {
+  createUsersInBatches,
+};

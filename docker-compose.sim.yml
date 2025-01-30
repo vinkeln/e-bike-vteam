@@ -1,0 +1,51 @@
+# Definiera externa nätverk
+networks:
+  vteam:
+    external: true  # Anger att vi använder det externa nätverket som skapades i docker-compose.prod.yml
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: elsparkcykel
+      MYSQL_USER: dbadm
+      MYSQL_PASSWORD: P@ssw0rd
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+      - ./config/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      vteam:
+
+  server:
+    image: abedsandeed/server:1.0.0
+    container_name: "servertest2"
+    ports:
+      - "3000:3000"
+    env_file: 
+    - .env
+    environment:
+      DB_HOST: mariadb
+      DB_USER: dbadm
+      DB_PASSWORD: P@ssw0rd
+      DB_NAME: elsparkcykel
+    depends_on:
+      - mariadb
+    networks:
+      vteam:
+
+  simulator:
+    image: abedsandeed/simulering:1.0.0
+    container_name: simulator
+    networks:
+      - vteam
+    depends_on:
+      - server
+      - mariadb
+    environment:
+      SERVER_HOST: server  # Servernamnet i nätverket
+      DB_HOST: mariadb  # Servernamnet i nätverket
+    

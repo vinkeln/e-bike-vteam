@@ -1,11 +1,16 @@
 const { Server } = require("socket.io");
 const bikeController = require("../src/controller/bikeController.js");
-const { notifyAdmins, notifyCustomer } = require("../src/notify/notify");
+const { notifyAdmins, notifyCustomer } = require("../src/notify/notify.js");
 const parkingssModules = require("../src/parkings/modules.js"); // Moduler för databashantering relaterade till resor
 
 function initializeSocketHandlers(server) {
   const io = new Server(server, {
     cors: { origin: "*" },
+    maxHttpBufferSize: 1e5, // Tillåt stora meddelanden (100MB)
+    pingInterval: 50000, // Interval för ping-pong (5 sek)
+    pingTimeout: 50000, // Timeout för ping-svar
+    allowEIO3: true,
+    perMessageDeflate: false, // Inaktiverar kompression (kan förbättra prestanda vid hög trafik)
   });
 
   // Dictionary för att spåra anslutna scooters
@@ -121,7 +126,6 @@ function initializeSocketHandlers(server) {
       }
     });
 
-    // Update bike status
     socket.on("updateStatus", async (data) => {
       const {
         bikeSerialNumber,
@@ -131,23 +135,32 @@ function initializeSocketHandlers(server) {
         longitude,
         latitude,
         batteryLevel,
-      } = data;
+        isFirstUpdate, // Hämta flaggan
+      } = data.bikes;
+
       try {
-        const result = await bikeController.updateStatus(
-          bikeSerialNumber,
-          locationId,
-          status,
-          speed,
-          longitude,
-          latitude,
-          batteryLevel
-        );
-        if (result.affectedRows === 0) {
-          socket.emit("updateError", { message: "Bike not found" });
-        } else {
-          io.emit("bikeNotification", data); //
-          socket.emit("updateSuccess", { message: "Bike status updated" });
+        // Om flaggan är true, uppdatera databasen
+        if (isFirstUpdate) {
+          const result = await bikeController.updateStatus(
+            bikeSerialNumber,
+            locationId,
+            status,
+            speed,
+            longitude,
+            latitude,
+            batteryLevel
+          );
+          console.log("heloool");
+          if (result.affectedRows === 0) {
+            socket.emit("updateError", { message: "Bike not found" });
+            return;
+          }
         }
+
+        let bikesArray = Array.isArray(data.bikes) ? data.bikes : [data.bikes];
+        // Skicka notifikation oavsett om det är en första uppdatering eller inte
+        io.emit("bikeNotification", bikesArray);
+        socket.emit("updateSuccess", { message: "Bike status updated" });
       } catch (error) {
         console.error("Error updating bike status:", error.message);
         socket.emit("updateError", { message: "Error updating bike status" });

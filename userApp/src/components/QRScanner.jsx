@@ -40,7 +40,6 @@ const QRScanner = () => {
     console.log(scooterId)
 
     if (input === scooterId) {
-      console.log(scooterId)
       alert("Scooter ID matched! Starting the trip...");
       // Render TravelButton or perform any other action
     } else {
@@ -52,7 +51,7 @@ const QRScanner = () => {
     height: 240,
     width: 320,
   };
-
+console.log(userId, scooterId, startLocationId, cost)
   return (
     <div>
      

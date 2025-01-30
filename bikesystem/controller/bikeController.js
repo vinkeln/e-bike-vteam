@@ -15,7 +15,7 @@ let chargingInterval; // För att hålla koll på laddningen
 let consumptionInterval;
 let chargingStarted = false; // För att hålla reda på om laddningen redan har startat
 let chargingDuration = 60 * 60 * 1000;
-
+let isFirstStatusUpdate = true;
 // Simulera röd lampa
 function simulateRedLight(isOn) {
   if (isOn) {
@@ -204,6 +204,7 @@ function sendStatusUpdate(
   batteryLevel,
   speed = 0
 ) {
+  const isFirstUpdate = isFirstStatusUpdate;
   const maxSpeed = 30; // Top speed 30
   const realSpeed = speed; // Funktion to get speed from sensor
   const locationId = 1; // Funktion to get location ID
@@ -211,7 +212,7 @@ function sendStatusUpdate(
   const latitude = currentLatitude;
   const battery = batteryLevel;
   // Exampel bike ID
-
+  console.log(isFirstUpdate);
   // Check if the speed exceeds the limit
   if (realSpeed > maxSpeed) {
     console.warn(`Speed ${realSpeed} exceeds the limit ${maxSpeed}`);
@@ -226,10 +227,13 @@ function sendStatusUpdate(
     longitude: longitude,
     latitude: latitude,
     batteryLevel: battery,
+    isFirstUpdate,
   };
   // Log the data before sending
   console.log("Sending data to server:", data);
-  socket.emit("updateStatus", data); // Skicka data till servern
+  socket.emit("updateStatus", {
+    bikes: data,
+  }); // Skicka data till servern
 }
 
 // Funktion to get speed from sensor
@@ -248,7 +252,7 @@ socket.on("updateError", (error) => {
 
 socket.on("connect", async () => {
   console.log("Connected to server");
-  await cyklesModules.addBikeToDatabase(bikeData);
+  await cyklesModules.addBikeToDatabase(bikeData, "localhost");
   socket.emit("registerScooter", bikeData.bike_serial_number);
   sendStatusUpdate("ledig", currentLongitude, currentLatitude, batteryLevel);
   // Starta batterisimuleringen
@@ -286,7 +290,6 @@ socket.on("startRide", (data) => {
     console.warn("Ride cannot be started. Bike is disabled.");
     return; // Förhindra start av resa
   }
-
   const userId = data.userId;
   console.log(`Starta resa för användare ${userId}`);
 
@@ -308,7 +311,13 @@ socket.on("startRide", (data) => {
 
   // Avbryt tidigare statusintervall
   if (statusInterval) clearInterval(statusInterval);
-  sendStatusUpdate("upptagen", currentLongitude, currentLatitude, batteryLevel);
+  sendStatusUpdate(
+    "upptagen",
+    currentLongitude,
+    currentLatitude,
+    batteryLevel,
+    isFirstStatusUpdate
+  );
   // Starta rörelsesimulering
   statusInterval = setInterval(() => {
     const movement = moveCycle.getRandomMovement();
@@ -330,7 +339,6 @@ socket.on("startRide", (data) => {
 socket.on("stopRide", () => {
   // Avbryt tidigare statusintervall
   console.log("Stopping ride");
-
   // Logga slutplats och tid
   const endTime = new Date().toISOString();
   const activeTravel = travelLogs.find(
@@ -345,7 +353,13 @@ socket.on("stopRide", () => {
     activeTravel.status = "completed"; // Uppdatera status
   }
   if (statusInterval) clearInterval(statusInterval);
-  sendStatusUpdate("ledig", currentLongitude, currentLatitude, batteryLevel);
+  sendStatusUpdate(
+    "ledig",
+    currentLongitude,
+    currentLatitude,
+    batteryLevel,
+    isFirstStatusUpdate
+  );
   // Starta nytt intervall
   statusInterval = setInterval(() => {
     sendStatusUpdate("ledig", currentLongitude, currentLatitude, batteryLevel);
