@@ -5,6 +5,10 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 
 ---
 
+[![Code Coverage](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
+
 ## Funktioner
 - **Frontend:**
   - Interaktiv karta för scooters och laddstationer.
@@ -52,8 +56,8 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 2.Skapa .env-fil:
 ```bash
 PORT=3000
-API_KEY=dinApiNyckel
-JWT_KEY=dinJwtNyckel
+API_KEY=
+JWT_KEY=
 ```
   
 3. Starta server:
