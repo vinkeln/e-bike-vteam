@@ -56,8 +56,8 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 2.Skapa .env-fil:
 ```bash
 PORT=3000
-API_KEY=dinApiNyckel
-JWT_KEY=dinJwtNyckel
+API_KEY=
+JWT_KEY=
 ```
   
 3. Starta server:
