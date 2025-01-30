@@ -1,0 +1,111 @@
+/* Grundläggande navbar-stil */
+.navbar {
+  background-color: #333;
+  color: white;
+  display: flex;
+  flex-direction: column; /* Staplar innehållet vertikalt */
+  align-items: center;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.navbar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  flex-direction: column; /* Lägger elementen i en vertikal rad */
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem; /* Lägger till lite avstånd */
+}
+
+/* Hamburgermenyn placeras under logon */
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ff0;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+}
+
+/* Navigeringslänkar */
+.nav-links {
+  list-style: none;
+  flex-direction: column;
+  width: 100%;
+  background-color: #444;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+/* Länkar i menyn */
+.nav-links li {
+  padding: 1rem;
+  width: 100%;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.4rem;
+  transition: color 0.3s, background-color 0.3s;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ff0;
+}
+
+.nav-links a:active {
+  background-color: #ff0;
+  color: black;
+}
+
+/* Anpassad storlek på texten */
+body {
+  font-size: 1.2rem;
+  padding-top: 150px;
+}
+
+/* Responsiv justering för extremt små skärmar */
+@media (max-width: 400px) {
+  .navbar-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .menu-toggle {
+    font-size: 1.3rem;
+  }
+}
