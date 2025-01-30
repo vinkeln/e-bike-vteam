@@ -1,6 +1,5 @@
 networks:
   vteam:
-    external: true
 
 services:
   mariadb:
