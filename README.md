@@ -31,7 +31,8 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
     - Verifiera installationen genom att köra följande kommando i terminalen:
     
   #### Linux
-  ```bash
+  ```
+bash
    sudo apt-get install -y nodejs
    ```
   
