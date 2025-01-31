@@ -30,9 +30,6 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
     - Installera Node.js genom att följa installationsguiden.
     - Verifiera installationen genom att köra följande kommando i terminalen:
     
-     ```bash
-     node -v
-     ```
   #### Linux
   ```bash
    sudo apt-get install -y nodejs
