@@ -84,3 +84,12 @@ npm start
 ```bash
 npm test
 ```
+### För att kontrollera github/worflows flödet med ci-cd:
+```
+https://github.com/vinkeln/e-bike-vteam/
+actions
+```
+### Kontrollera automatiska tester med Scrutinizer
+```
+https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/
+```
