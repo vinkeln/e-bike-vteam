@@ -29,6 +29,9 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
  - Ladda ner Node.js från Node.js officiella webbplats.
  - Installera Node.js genom att följa installationsguiden.
  - Verifiera installationen genom att köra följande kommando i terminalen:
+ ```bash
+   node -v
+   ```
  
     
   #### Linux
@@ -63,7 +66,7 @@ node bikeController.js
   docker-compose -f docker-compose.sim.yml up
 ```
 - Om du vill starta simuleringen i bakgrunden kör:
-```bash
+  ```bash
   docker-compose -f docker-compose.sim.yml up -d
 ```
 
