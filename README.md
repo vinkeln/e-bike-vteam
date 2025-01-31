@@ -26,10 +26,10 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 
 ## 4.Node.js (Om du behöver köra simuleringen utan Docker)
  ### Om du inte har Node.js installerat, följ dessa steg:
+ - Ladda ner Node.js från Node.js officiella webbplats.
+ - Installera Node.js genom att följa installationsguiden.
+ - Verifiera installationen genom att köra följande kommando i terminalen:
  
-    - Ladda ner Node.js från Node.js officiella webbplats.
-    - Installera Node.js genom att följa installationsguiden.
-    - Verifiera installationen genom att köra följande kommando i terminalen:
     
   #### Linux
   ```bash
