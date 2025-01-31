@@ -9,17 +9,70 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/?branch=main)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/vinkeln/e-bike-vteam/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
 
-## Funktioner
-- **Frontend:**
-  - Interaktiv karta för scooters och laddstationer.
-  - Användarvänligt gränssnitt för bokning, betalning och reshistorik.
-  - Administratörsgränssnitt för hantering av städer, parkeringszoner och användare.
+# Starta E-Bike VTeam Projektet
+## 1.Klona Repot
+ - För att börja måste du klona projektets repository från GitHub till din lokala maskin.
+ - Öppna terminalen och kör följande kommando:
+   ```bash
+   git clone -b main --single-branch https://github.com/DITT-USERNAME/e-bike-vteam.git](https://github.com/vinkeln/e-bike-vteam
+   ```
+## 2.Navigera till Projektmappen
+ - När repot har klonats, navigera till projektmappen med följande kommando:
+   ```bash
+   cd e-bike-vteam
+   ```
+## 3.Docker Engine
+ - Se till att du har Docker Engine installerad och igång på din maskin. Om du inte har Docker installerat kan du ladda ner och installera det från Dockers officiella webbplats.
 
-- **Backend:**
-  - RESTful API för hantering av användare, scooters, resor, betalningar och laddstationer.
-  - Realtidsuppdateringar för scooterstatus via **Socket.IO**.
-  - Stöd för autentisering och behörighetskontroll med **JWT**.
+## 4.Node.js (Om du behöver köra simuleringen utan Docker)
+ ### Om du inte har Node.js installerat, följ dessa steg:
+    - Ladda ner Node.js från Node.js officiella webbplats.
+    - Installera Node.js genom att följa installationsguiden.
+    - Verifiera installationen genom att köra följande kommando i terminalen:
+   ```bash
+   node -v
+   ```
+  #### Linux
+  ```bash
+   sudo apt-get install -y nodejs
+   ```
+  
+# Starta Projektet
+## 1.Starta Docker Containers
+ - För att starta alla servrar och tjänster, kör följande kommando:
+   ```bash
+   docker-compose -f docker-compose.dev.yml up -d
+   ```
+## 2.Öppna Projektet i Webbläsaren
+ - När alla tjänster har startats kan du öppna projektet i din webbläsare med följande URL:er:
+  #### Admin-sida: http://localhost:8080
+  #### User-sida: http://localhost:3002
+  #### User-app: http://localhost:8081
 
+## 3.Simulera en cykelhyra
+ - Om du vill simulera hur en cykel hyrs ut, navigera till bikesystem och starta nödvändiga tjänster:
+```bash
+   cd bikesystem
+npm install
+cd controller
+node bikeController.js
+```
+
+# Starta simulering
+- För att simulera uthyrning av 3000 cyklar i 3 olika städer, samt lägga till 3000 användare och skapa 3000 resor, kör:
+  ```bash
+  docker-compose -f docker-compose.sim.yml up
+```
+- Om du vill starta simuleringen i bakgrunden kör:
+  ```bash
+  docker-compose -f docker-compose.sim.yml up -d
+```
+
+# stoppa Docker-containers
+  ```bash
+  docker-compose -f docker-compose.dev.yml down
+  docker-compose -f docker-compose.dev.yml down
+```
 ---
 
 ## Teknologi
