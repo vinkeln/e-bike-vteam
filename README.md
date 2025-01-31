@@ -14,7 +14,7 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
  - För att börja måste du klona projektets repository från GitHub till din lokala maskin.
  - Öppna terminalen och kör följande kommando:
    ```bash
-   git clone -b main --single-branch https://github.com/DITT-USERNAME/e-bike-vteam.git](https://github.com/vinkeln/e-bike-vteam
+   git clone -b main --single-branch https://github.com/vinkeln/e-bike-vteam
    ```
 ## 2.Navigera till Projektmappen
  - När repot har klonats, navigera till projektmappen med följande kommando:
@@ -29,9 +29,9 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
     - Ladda ner Node.js från Node.js officiella webbplats.
     - Installera Node.js genom att följa installationsguiden.
     - Verifiera installationen genom att köra följande kommando i terminalen:
-   ```bash
-   node -v
-   ```
+     ```bash
+     node -v
+     ```
   #### Linux
   ```bash
    sudo apt-get install -y nodejs
@@ -52,7 +52,7 @@ Scooter Rental Service är en komplett plattform som tillhandahåller hantering 
 ## 3.Simulera en cykelhyra
  - Om du vill simulera hur en cykel hyrs ut, navigera till bikesystem och starta nödvändiga tjänster:
 ```bash
-   cd bikesystem
+cd bikesystem
 npm install
 cd controller
 node bikeController.js
@@ -64,7 +64,7 @@ node bikeController.js
   docker-compose -f docker-compose.sim.yml up
 ```
 - Om du vill starta simuleringen i bakgrunden kör:
-  ```bash
+```bash
   docker-compose -f docker-compose.sim.yml up -d
 ```
 
