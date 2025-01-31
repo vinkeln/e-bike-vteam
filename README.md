@@ -98,40 +98,6 @@ node bikeController.js
 - **jsonwebtoken (JWT)**: Autentisering och sessionshantering.
 ---
 
-## Installation och Användning
-### Krav
-- **Node.js** och **npm** installerat.
-- **MySQL**-databas konfigurerad enligt projektets specifikationer.
-
-### 1.Backend
-1. Installera beroenden:
-   ```bash
-   npm install
-   ```
-2.Skapa .env-fil:
-```bash
-PORT=3000
-API_KEY=
-JWT_KEY=
-```
-  
-3. Starta server:
-```bash
-npm start
-```
-### 2.Frontend
-1.Gå till frontend-mappen:
-```bash
-cd scooter-rental
-```
-2.Installera beroenden:
-```bash
-npm install
-```
-3.Starta front-servern:
-```bash
-npm start
-```
 
 ## 3.Tester
 
