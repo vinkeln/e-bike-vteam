@@ -64,13 +64,17 @@ node bikeController.js
 - För att simulera uthyrning av 3000 cyklar i 3 olika städer, samt lägga till 3000 användare och skapa 3000 resor, kör:
   ```bash
   docker-compose -f docker-compose.sim.yml up
-```
+  ```
+- Om du vill starta simuleringen i bakgrunden kör:
+  ```bash
+  docker-compose -f docker-compose.sim.yml up -d
+  ```
 
 # stoppa Docker-containers
   ```bash
   docker-compose -f docker-compose.dev.yml down
-  docker-compose -f docker-compose.dev.yml down
-```
+  docker-compose -f docker-compose.sim.yml down
+  ```
 ---
 
 ## Teknologi
