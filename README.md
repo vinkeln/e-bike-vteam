@@ -66,9 +66,7 @@ node bikeController.js
   docker-compose -f docker-compose.sim.yml up
 ```
 - Om du vill starta simuleringen i bakgrunden kör:
-  ```bash
-  docker-compose -f docker-compose.sim.yml up -d
- ```
+ 
 
 # stoppa Docker-containers
   ```bash
